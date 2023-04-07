@@ -16,7 +16,7 @@
 *   return 0 if init was successful
 *   return -1 otherwise
 */
-int rend_init_glfw(void);
+int rend_init(void);
 
 /*  Create GLFW window and bring it into focus 
 *   [in] - window title and window measurements
@@ -30,6 +30,6 @@ int rend_create_window(const char* title, int width, int height);
 void rend_window_render(void);
 
 /*  Deinit GLFW Lib */
-void rend_deinit_glfw(void);
+void rend_deinit(void);
 
 #endif /* RENDERER_H */

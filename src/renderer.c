@@ -28,7 +28,7 @@ GLFWwindow* window = NULL; /* window object */
 *   return 0 if init was successful
 *   return -1 otherwise
 */
-int rend_init_glfw(void)
+int rend_init(void)
 {
     int ret_val = 0;
     
@@ -84,7 +84,7 @@ void rend_window_render(void)
 }
 
 /*  Deinit GLFW Lib */
-void rend_deinit_glfw(void)
+void rend_deinit(void)
 {
     glfwTerminate();
 }
