@@ -12,8 +12,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "renderer.h"
 #include "logger.h"
+#include "platform.h"
+#include "event_system.h"
+#include "input_system.h"
+#include "game_controller.h"
 
 /************************************************
 * DEFINES
@@ -27,15 +30,27 @@
 ************************************************/
 
 int main(int argc, char* argv[])
-{   
+{
     char* win_title  = NULL;
     int   win_width  = 0;
     int   win_height = 0;
     char* end_ptr    = NULL; /* to be used by strtol func*/
-    
-    logg_info("Renderer Init");
-    rend_init();
-    logg_info("Renderer Init - Done");
+
+    logg_info("ES Init");
+    es_init();
+    logg_info("ES Init - Done");
+
+    logg_info("Input Sys Init");
+    input_sys_init();
+    logg_info("Input Sys Init - Done");
+
+    logg_info("Game Controller Init");
+    game_ctrl_init();
+    logg_info("Game Controller Init - Done");
+
+    logg_info("Platform Init");
+    platform_init();
+    logg_info("Platform Init - Done");
 
     if (1 == argc) /* default -> no args*/
     {
@@ -70,20 +85,36 @@ int main(int argc, char* argv[])
     }
 
     logg_info("Creating Window");
-    if (0 != rend_create_window(win_title, win_width, win_height))
+    if (0 != platform_create_window(win_title, win_width, win_height))
     {
         logg_err("Error when creating window");
         return 1;
     }
     logg_info("Creating Window - Done");
 
+    logg_info("Setting up Platform");
+    pltf_glfw_hooks pltf_hooks = {0};
+    pltf_hooks.update_hook = game_ctrl_update;
+    pltf_hooks.render_hook = game_ctrl_render;
+    logg_info("Setting up Platform - Done");
+
     logg_info("Starting main loop");
-    rend_window_render();
+    platform_main_loop(pltf_hooks);
+
     logg_info("Exited main loop");
 
-    logg_info("Renderer Deinit");
-    rend_deinit();
-    logg_info("Renderer Deinit - Done");
+
+    logg_info("Platform Deinit");
+    platform_deinit();
+    logg_info("Platform Deinit - Done");
+
+    logg_info("Game Controller Deinit");
+    game_ctrl_deinit();
+    logg_info("Game Controller Deinit - Done");
+
+    logg_info("Input Sys Deinit");
+    input_sys_deinit();
+    logg_info("Input Sys Deinit - Done");
 
     logg_info("Exiting");
 

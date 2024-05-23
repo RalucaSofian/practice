@@ -1,15 +1,15 @@
-/* @file logger.c
-*
-*
-*
-*
-*
-*/
+/*! @file logger.c
+ *
+ *
+ *
+ *
+ *
+ */
 /*********************************************************
 * INCLUDES
 *********************************************************/
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> // malloc; free...
 #include <time.h>
 #include <sys/time.h>
 #include <stdarg.h>
@@ -24,6 +24,7 @@
 #define ANSI_COLOUR_ORANGE     "\033[38;2;255;165;0m"
 #define ANSI_COLOUR_RED        "\033[0;31m"
 #define ANSI_COLOUR_RESET      "\033[0m"
+#define ASCII_BULLET           "\u2023" // triangular bullet >
 
 /*********************************************************
 * FUNCTION DEFINITIONS
@@ -61,39 +62,40 @@ static char* logg_timestamp(void)
 *   [in] - log level
 *   [in] - log message
 */
-void logg(log_level log_lvl, const char* msg_in, ...)
+void logg(log_level log_lvl, const char* msg_in, const char* file_name, ...)
 {
     char message[1000];
     va_list args;
-    va_start(args, msg_in);
+    va_start(args, file_name);
     vsprintf(message, msg_in, args);
     va_end(args);
 
-    char* timestamp = logg_timestamp();
+    char* timestamp      = logg_timestamp();
+    char* trim_file_name = (char*)file_name + 6; // discard first 6 characters: ./src/
 
     switch(log_lvl)
     {
         case LOGG_VERBOSE:
         {
-            printf("%s [VERB] %s\n", timestamp, message);
+            printf("%s [VERB] %-32s %s %s\n", timestamp, trim_file_name, ASCII_BULLET, message);
             break;
         }
 
         case LOGG_INFO:
         {
-            printf("%s %s[INFO]%s %s\n", timestamp, ANSI_COLOUR_GREEN, ANSI_COLOUR_RESET, message);
+            printf("%s %s[INFO] %-32s %s%s %s\n", timestamp, ANSI_COLOUR_GREEN, trim_file_name, ASCII_BULLET, ANSI_COLOUR_RESET, message);
             break;
         }
 
         case LOGG_WARN:
         {
-            printf("%s %s[WARN]%s %s\n", timestamp, ANSI_COLOUR_ORANGE, ANSI_COLOUR_RESET, message);
+            printf("%s %s[WARN] %-32s %s%s %s\n", timestamp, ANSI_COLOUR_ORANGE, trim_file_name, ASCII_BULLET, ANSI_COLOUR_RESET, message);
             break;
         }
 
         case LOGG_ERR:
         {
-            printf("%s  %s[ERR]%s %s\n", timestamp, ANSI_COLOUR_RED, ANSI_COLOUR_RESET, message);
+            printf("%s %s[ERR]  %-32s %s%s %s\n", timestamp, ANSI_COLOUR_RED, trim_file_name, ASCII_BULLET, ANSI_COLOUR_RESET, message);
             break;
         }
         default:

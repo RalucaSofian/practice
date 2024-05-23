@@ -7,15 +7,18 @@
 #
 ############################################################
 
-OUT_DIR := ./bin
-SRC_DIR := ./src
-INC_DIR := ./inc
+OUT_DIR  := ./bin
+SRC_DIR  := ./src
+INC_DIR  := ./inc
+
+PLTF_INC := $(INC_DIR)/platform
+PLTF_SRC := $(SRC_DIR)/platform
 
 CC := gcc
 CUSTOM_CFLAGS := -Wall -Werror
-CUSTOM_LDFLAGS := -lglfw -lGLU -lGL -lXrandr -lXxf86vm -lXi -lXinerama -lX11 -lrt -ldl
-SOURCES += $(wildcard $(SRC_DIR)/*.c)
-INCLUDES += -I$(INC_DIR)
+CUSTOM_LDFLAGS := -lglfw3 -lGLU -lGL -lrt -ldl -lm
+SOURCES += $(wildcard $(SRC_DIR)/*.c) $(wildcard $(PLTF_SRC)/*.c)
+INCLUDES += -I$(INC_DIR) -I$(PLTF_INC)
 OBJECTS := $(patsubst %.c,%.o, $(SOURCES))
 BINARY := $(OUT_DIR)/practice
 DEFS :=

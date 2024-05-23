@@ -1,91 +1,50 @@
-/* @file renderer.c
-*
-*
-*
-*
-*
-*/
+/*! @file renderer.c
+ *
+ *
+ *
+ *
+ *
+ */
 
-/******************
+/************************************************************************
 * INCLUDES
-******************/
+************************************************************************/
 #include <stdio.h>
-#include <GLFW/glfw3.h>
 
+#include "platform_renderer.h"
 #include "renderer.h"
 
-/******************
-* GLOBAL VARS
-******************/
-GLFWwindow* window = NULL; /* window object */
+/************************************************************************
+* FUNCTION DEFINITIONS
+************************************************************************/
 
-
-/******************
-* FUNC DEFINITIONS
-******************/
-
-/*  Init GLFW Lib 
-*   return 0 if init was successful
-*   return -1 otherwise
-*/
-int rend_init(void)
+void renderer_init(void)
 {
-    int ret_val = 0;
-    
-    if (GLFW_TRUE != glfwInit())
-    {
-        ret_val = -1;
-    }
-
-    return ret_val;
+    // platform_renderer_init();
 }
 
-/*  Create GLFW window and bring it into focus 
-*   [in] - window title and window measurements
-*   return 0 if creation was successful
-*   return -1 otherwise
-*/
-int rend_create_window(const char* title, int width, int height)
+void renderer_clear_screen_with_col(renderer_colour colour)
 {
-    int ret_val = 0;
-
-    /* Create window and its OpenGL context */
-    window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (NULL == window)
-    {
-        glfwTerminate();
-        ret_val = -1;
-    }
-    else
-    {
-        /* Make the window's context current */
-        glfwMakeContextCurrent(window);
-    }
-
-    return ret_val;
+    // platform_renderer_clear.....
 }
 
-/* Renderer main loop
-*  will run until user closes window */
-void rend_window_render(void)
+
+void renderer_clear_screen(void)
 {
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
-    {
-        /* Render here -- clear colour buffer to start new frame */
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
-    }
+    // renderer_clear_screen_with_col with default colour
 }
 
-/*  Deinit GLFW Lib */
-void rend_deinit(void)
+void renderer_draw_rect_with_col(double x, double y, double width, double height, renderer_colour colour)
 {
-    glfwTerminate();
+    //platform_renderer....
 }
 
+void renderer_draw_rect(double x, double y, double width, double height)
+{
+    //our renderer_draw_rect_with_col with default colour
+}
+
+void renderer_deinit(void)
+{
+
+}
