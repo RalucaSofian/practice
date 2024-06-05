@@ -14,6 +14,10 @@
 #include "logger.h"
 #include "event_system.h"
 #include "input_system.h"
+#include "player_system.h"
+#include "camera_system.h"
+#include "render_system.h"
+#include "entity_types.h"
 #include "game_controller.h"
 
 /************************************************************************
@@ -21,31 +25,40 @@
 ************************************************************************/
 int kb_quit_handler_id; // handler ID for the KB Quit Event
 
+// Internal colours defined in RGBA
+REND_colour col_red        = {1.0, 0.0, 0.0, 1.0};
+REND_colour col_green      = {0.0, 1.0, 0.0, 1.0};
+REND_colour col_blue       = {0.0, 0.0, 1.0, 1.0};
+REND_colour col_black      = {0.0, 0.0, 0.0, 1.0};
+REND_colour col_white      = {1.0, 1.0, 1.0, 1.0};
+REND_colour col_grey       = {0.5, 0.5, 0.5, 1.0};
+REND_colour col_grey_light = {0.75, 0.75, 0.75, 1.0};
+REND_colour col_grey_dark  = {0.25, 0.25, 0.25, 1.0};
+
 /************************************************************************
 * FUNCTION DEFINITIONS
 ************************************************************************/
 
-/*! @brief Handler used for reacting to the ESC or CTRL+Q
- * keys being pressed
+/*! @brief Handler used for reacting to the ESC or CTRL+Q keys being pressed
  */
-static void kb_quit_handler(es_kb_event* kb_event)
+static void kb_quit_handler(EVSYS_kb_event* kb_event)
 {
     // QUIT == ESC or CTRL+Q was pressed
     switch (kb_event->key_state)
     {
-        case ES_BUTTON_PRESSED:
+        case KEY_STATE_PRESSED:
         {
             if (KEY_ESCAPE == kb_event->key)
             {
-                logg_info("ESC Pressed. Quitting");
-                es_dispatch_quit_event();
+                LOGG_info("ESC Pressed. Quitting");
+                EVSYS_DispatchQuitEvent();
             }
             else if (KEY_Q == kb_event->key)
             {
-                if (ES_BUTTON_PRESSED == input_sys_get_key_state(KEY_LEFT_CONTROL))
+                if (KEY_STATE_PRESSED == INSYS_GetKeyState(KEY_LEFT_CONTROL))
                 {
-                    logg_info("CTRL+Q Pressed. Quitting");
-                    es_dispatch_quit_event();
+                    LOGG_info("CTRL+Q Pressed. Quitting");
+                    EVSYS_DispatchQuitEvent();
                 }
             }
             break;
@@ -56,23 +69,106 @@ static void kb_quit_handler(es_kb_event* kb_event)
 }
 
 
-void game_ctrl_init(void)
+/************************************************************************
+************************************************************************/
+
+void GAMECTRL_Init(void)
 {
-    kb_quit_handler_id = es_subscribe_kb_event(kb_quit_handler);
+    CAMERA_Init(25.0, 25.0);
+    kb_quit_handler_id = EVSYS_SubscribeKbEvent(kb_quit_handler);
+    ENTITY_InitEntities(STARTING_NO_OF_ENTITIES);
+    PLAYER_Init();
+
+    const ENTITY_entity* static_entity1 = ENTITY_CreateStaticEntity(100.0,
+                                                                    100.0,
+                                                                    50.0,
+                                                                    50.0,
+                                                                    col_black);
+    LOGG_info("Static Entity 1 ID = %d", static_entity1->id);
+
+    const ENTITY_entity* static_entity2 = ENTITY_CreateStaticEntity(200.0,
+                                                                    100.0,
+                                                                    50.0,
+                                                                    50.0,
+                                                                    col_grey_dark);
+    LOGG_info("Static Entity 2 ID = %d", static_entity2->id);
+
+    const ENTITY_entity* static_entity3 = ENTITY_CreateStaticEntity(300.0,
+                                                                    100.0,
+                                                                    50.0,
+                                                                    50.0,
+                                                                    col_grey);
+    LOGG_info("Static Entity 3 ID = %d", static_entity3->id);
+
+    const ENTITY_entity* static_entity4 = ENTITY_CreateStaticEntity(400.0,
+                                                                    100.0,
+                                                                    50.0,
+                                                                    50.0,
+                                                                    col_grey_light);
+    LOGG_info("Static Entity 4 ID = %d", static_entity4->id);
+
+    const ENTITY_entity* static_entity5 = ENTITY_CreateStaticEntity(500.0,
+                                                                    100.0,
+                                                                    50.0,
+                                                                    50.0,
+                                                                    col_green);
+    LOGG_info("Static Entity 5 ID = %d", static_entity5->id);
+
+    ENTITY_entity* player_one = ENTITY_CreatePlayerEntity(100.0,
+                                                          100.0,
+                                                          50.0,
+                                                          100.0,
+                                                          col_blue,
+                                                          1);
+    LOGG_info("Player One ID = %d", player_one->id);
+
+    ENTITY_entity* player_two = ENTITY_CreatePlayerEntity(1000.0,
+                                                          100.0,
+                                                          50.0,
+                                                          100.0,
+                                                          col_red,
+                                                          2);
+    LOGG_info("Player Two ID = %d", player_two->id);
 }
 
-
-void game_ctrl_update(double time_delta)
+void GAMECTRL_Update(double time_delta)
 {
-    logg_info("Game Ctrl update func; time delta = %f sec", time_delta);
+    ENTITY_entity* entity       = NULL;
+    uint32_t       entity_count = ENTITY_GetNoOfEntities();
+    for (int i = 0; i < entity_count; i++)
+    {
+        entity = ENTITY_GetEntityByIndex(i);
+        if (NULL != entity->player_info)
+        {
+            PLAYER_Update(time_delta, entity);
+            CAMERA_Update(time_delta, entity);
+        }
+    }
 }
 
-void game_ctrl_render(void)
+void GAMECTRL_Render(void)
 {
+    REND_Begin(CAMERA_GetX(), CAMERA_GetY());
+    REND_ClearScreenWithCol(col_white);
 
+    // Render all entities, if they have Render Info
+    ENTITY_entity* entity       = NULL;
+    uint32_t       entity_count = ENTITY_GetNoOfEntities();
+    for (int i = 0; i < entity_count; i++)
+    {
+        entity = ENTITY_GetEntityByIndex(i);
+        if (NULL != entity->render_info)
+        {
+            RENDSYS_DrawEntity(entity);
+        }
+    }
+
+    REND_PresentScreen();
 }
 
-void game_ctrl_deinit(void)
+void GAMECTRL_Deinit(void)
 {
-    es_unsubscribe_event(kb_quit_handler_id);
+    PLAYER_Deinit();
+    ENTITY_DeinitEntities();
+    EVSYS_UnsubscribeEvent(kb_quit_handler_id);
 }

@@ -11,14 +11,20 @@ OUT_DIR  := ./bin
 SRC_DIR  := ./src
 INC_DIR  := ./inc
 
+SYST_INC := $(INC_DIR)/systems
+SYST_SRC := $(SRC_DIR)/systems
+
 PLTF_INC := $(INC_DIR)/platform
 PLTF_SRC := $(SRC_DIR)/platform
+
+UTIL_INC := $(INC_DIR)/utils
+UTIL_SRC := $(SRC_DIR)/utils
 
 CC := gcc
 CUSTOM_CFLAGS := -Wall -Werror
 CUSTOM_LDFLAGS := -lglfw3 -lGLU -lGL -lrt -ldl -lm
-SOURCES += $(wildcard $(SRC_DIR)/*.c) $(wildcard $(PLTF_SRC)/*.c)
-INCLUDES += -I$(INC_DIR) -I$(PLTF_INC)
+SOURCES += $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SYST_SRC)/*.c) $(wildcard $(PLTF_SRC)/*.c) $(wildcard $(UTIL_SRC)/*.c)
+INCLUDES += -I$(INC_DIR) -I$(SYST_INC) -I$(PLTF_INC) -I$(UTIL_INC)
 OBJECTS := $(patsubst %.c,%.o, $(SOURCES))
 BINARY := $(OUT_DIR)/practice
 DEFS :=

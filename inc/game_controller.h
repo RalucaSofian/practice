@@ -14,21 +14,19 @@
 
 /*! @brief Initialize the Game Controller
  */
-void game_ctrl_init(void);
+void GAMECTRL_Init(void);
 
-/*! @brief 
- *  @param[in] time_delta - time delta [sec]
- *  @return
+/*! @brief Update the Game Controller objects
+ *  @param[in] time_delta - time delta for updates [sec]
  */
-void game_ctrl_update(double time_delta);
+void GAMECTRL_Update(double time_delta);
 
-/*! @brief
+/*! @brief Render objects on the screen
  */
-void game_ctrl_render(void);
+void GAMECTRL_Render(void);
 
-/*! @brief Deinitialize the Game Controller
+/*! @brief De-initialize the Game Controller
  */
-void game_ctrl_deinit(void);
-
+void GAMECTRL_Deinit(void);
 
 #endif // GAME_CONTROLLER_H

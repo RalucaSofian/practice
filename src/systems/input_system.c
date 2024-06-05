@@ -24,17 +24,17 @@
 
 /*! @brief Structure of the key info handled by the Input System
  */
-typedef struct _is_key_info
+typedef struct _INSYS_key_info
 {
-    uint8_t  key_state;
-    uint32_t key_code;
-    char*    key_name;
-}is_key_info;
+    INTYPES_key_state key_state;
+    INTYPES_key_code  key_code;
+    char*             key_name;
+}INSYS_key_info;
 
 /************************************************************************
 * GLOBAL VARIABLES
 ************************************************************************/
-is_key_info key_info[KEY_LAST + 1]; // Key Info array
+INSYS_key_info key_info[KEY_LAST + 1]; // Key Info array
 int kb_handl_id; // Handler ID of the KB event handler
 
 /************************************************************************
@@ -43,7 +43,7 @@ int kb_handl_id; // Handler ID of the KB event handler
 
 /*! @brief Internal function used for initializing the Key Info structure
  */
-static void _init_key_info(void)
+static void init_key_info(void)
 {
     char* temp_str = NULL;
 
@@ -417,7 +417,7 @@ static void _init_key_info(void)
         }
         if (NULL != temp_str)
         {
-            key_info[i].key_state = ES_BUTTON_RELEASED;
+            key_info[i].key_state = KEY_STATE_RELEASED;
             key_info[i].key_code  = i;
 
             key_info[i].key_name = (char*)malloc(strlen(temp_str)+1);
@@ -430,11 +430,11 @@ static void _init_key_info(void)
 /*! @brief Internal function used for clearing the Key Info
  *        structure before de-initialization of the Input System
  */
-static void _clear_key_info(void)
+static void clear_key_info(void)
 {
     for (int i = 0; i <= KEY_LAST; i++)
     {
-        key_info[i].key_state = ES_BUTTON_LAST;
+        key_info[i].key_state = KEY_STATE_NONE;
         key_info[i].key_code  = KEY_LAST;
 
         if (NULL != key_info[i].key_name)
@@ -448,38 +448,40 @@ static void _clear_key_info(void)
  *  The Key Info structure is updated each time a kb key event
  *  is emitted
  */
-static void kb_change_cbk(es_kb_event* kb_event)
+static void kb_change_cbk(EVSYS_kb_event* kb_event)
 {
     key_info[kb_event->key].key_state = kb_event->key_state;
     key_info[kb_event->key].key_code  = kb_event->key;
 
-    // logg_info("Updated KB Key. Key State = %d; Key Code = %d; Key Name = %s",
-    //             key_info[kb_event->key].key_state,
-    //             key_info[kb_event->key].key_code,
-    //             key_info[kb_event->key].key_name);
+    LOGG_info("Updated KB Key. Key State = %d; Key Code = %d; Key Name = %s",
+                key_info[kb_event->key].key_state,
+                key_info[kb_event->key].key_code,
+                key_info[kb_event->key].key_name);
 }
 
+/************************************************************************
+************************************************************************/
 
-void input_sys_init(void)
+void INSYS_Init(void)
 {
-    _init_key_info();
+    init_key_info();
 
-    kb_handl_id = es_subscribe_kb_event(kb_change_cbk);
+    kb_handl_id = EVSYS_SubscribeKbEvent(kb_change_cbk);
 }
 
-void input_sys_get_key_name(int key_code, const char** key_name)
+void INSYS_GetKeyName(int key_code, const char** key_name)
 {
     *key_name = key_info[key_code].key_name;
 }
 
-int input_sys_get_key_state(int key_code)
+int INSYS_GetKeyState(INTYPES_key_code key_code)
 {
     return key_info[key_code].key_state;
 }
 
-void input_sys_deinit(void)
+void INSYS_Deinit(void)
 {
-    _clear_key_info();
+    clear_key_info();
 
-    es_unsubscribe_event(kb_handl_id);
+    EVSYS_UnsubscribeEvent(kb_handl_id);
 }

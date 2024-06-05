@@ -5,7 +5,6 @@
  *
  *
  */
-
 #ifndef EVENT_SYSTEM_H
 #define EVENT_SYSTEM_H
 
@@ -20,67 +19,58 @@
 
 /*! @brief Possible types of events to be handled by the system
  */
-typedef enum _es_ev_type
+typedef enum _EVSYS_ev_type
 {
-    ES_KEYBOARD_EV = 0,
-    ES_MOUSE_BTN_EV,
-    ES_MOUSE_MOVE_EV,
-    ES_WINDOW_RESIZE_EV,
-    ES_PAUSE_EV,
-    ES_QUIT_EV,
-    ES_LAST_EV
-}es_ev_type;
-
-/*! @brief Possible states for a button
- */
-typedef enum _es_btn_state
-{
-    ES_BUTTON_RELEASED = 0,
-    ES_BUTTON_PRESSED,
-    ES_BUTTON_LAST
-}es_btn_state;
+    EVT_KEYBOARD = 0,
+    EVT_MOUSE_BTN,
+    EVT_MOUSE_MOVE,
+    EVT_WINDOW_RESIZE,
+    EVT_PAUSE,
+    EVT_QUIT,
+    EVT_LAST
+}EVSYS_ev_type;
 
 /*! @brief Structure of the keyboard events to be handled by the system
  */
-typedef struct _es_kb_event
+typedef struct _EVSYS_kb_event
 {
-    es_btn_state key_state;
-    key_code     key;
-}es_kb_event;
+    INTYPES_key_state key_state;
+    INTYPES_key_code  key;
+}EVSYS_kb_event;
 
 /*! @brief Structure of the mouse buttons events to be handled by the system
  */
-typedef struct _es_mouse_btn_event
+typedef struct _EVSYS_mouse_btn_event
 {
-    es_btn_state button_state;
+    INTYPES_key_state button_state;
     //! TODO: create translation from GLFW keycodes
-    int          button;
-}es_mouse_btn_event;
+    int       button;
+}EVSYS_mouse_btn_event;
 
 /*! @brief Structure of the mouse move events to be handled by the system
  */
-typedef struct _es_mouse_move_event
+typedef struct _EVSYS_mouse_move_event
 {
     float x_pos;
     float y_pos;
-}es_mouse_move_event;
+}EVSYS_mouse_move_event;
 
 
 /*! @brief Function pointer type for keyboard event handlers
  */
-typedef void (* es_kb_ev_handler)(es_kb_event* kb_event);
+typedef void (* EVSYS_kb_ev_handler)(EVSYS_kb_event* kb_event);
 
 /*! @brief Function pointer type for mouse buttons event handlers
  */
-typedef void (* es_mouse_btn_ev_handler)(es_mouse_btn_event* mouse_btn_event);
+typedef void (* EVSYS_mouse_btn_ev_handler)(EVSYS_mouse_btn_event* mouse_btn_event);
 
 /*! @brief Function pointer type for mouse move event handlers
  */
-typedef void (* es_mouse_move_ev_handler)(es_mouse_move_event* mouse_move_event);
+typedef void (* EVSYS_mouse_move_ev_handler)(EVSYS_mouse_move_event* mouse_move_event);
 
 /*! @brief Function pointer type for quit event handlers
  */
-typedef void (* es_quit_ev_handler)(void);
+typedef void (* EVSYS_quit_ev_handler)(void);
 
 /************************************************************************
 * FUNCTION DECLARATIONS
@@ -88,25 +78,25 @@ typedef void (* es_quit_ev_handler)(void);
 
 /*! @brief Initialize the Event System
  */
-void es_init(void);
+void EVSYS_Init(void);
 
 /*! @brief Subscribe to a keyboard event
  *  @param[out] event_handler - handler function for kb events
  *  @return ID of the subscribed event handler
  */
-int es_subscribe_kb_event(es_kb_ev_handler event_handler);
+int EVSYS_SubscribeKbEvent(EVSYS_kb_ev_handler event_handler);
 
 /*! @brief Subscribe to a mouse button event
  *  @param[out] event_handler - handler function for mouse button events
  *  @return ID of the subscribed event handler
  */
-int es_subscribe_mouse_btn_event(es_mouse_btn_ev_handler event_handler);
+int EVSYS_SubscribeMouseBtnEvent(EVSYS_mouse_btn_ev_handler event_handler);
 
 /*! @brief Subscribe to a mouse move event
  *  @param[out] event_handler - handler function for mouse move events
  *  @return ID of the subscribed event handler
  */
-int es_subscribe_mouse_move_event(es_mouse_move_ev_handler event_handler);
+int EVSYS_SubscribeMouseMoveEvent(EVSYS_mouse_move_ev_handler event_handler);
 
 // /*! @brief Subscribe to a window resize event
 //  *  @param[out] event_handler - handler function for window resize events
@@ -124,30 +114,30 @@ int es_subscribe_mouse_move_event(es_mouse_move_ev_handler event_handler);
  *  @param[out] event_handler - handler function for Quit events
  *  @return ID of the subscribed event handler
 */
-int es_subscribe_quit_event(es_quit_ev_handler event_handler);
+int EVSYS_SubscribeQuitEvent(EVSYS_quit_ev_handler event_handler);
 
 /*! @brief Unsubscribe from an event
  *  @param[in] event_handler_id - ID of event handler to unsubscribe
  */
-void es_unsubscribe_event(int event_handler_id);
+void EVSYS_UnsubscribeEvent(int event_handler_id);
 
 /*! @brief Dispatch a keyboard event
  *  @param[in] kb_event - event to be dispatched
 */
-void es_dispatch_kb_event(es_kb_event kb_event);
+void EVSYS_DispatchKbEvent(EVSYS_kb_event kb_event);
 
 /*! @brief Dispatch a mouse button event
  *  @param[in] mouse_btn_event - event to be dispatched
  */
-void es_dispatch_mouse_btn_event(es_mouse_btn_event mouse_btn_event);
+void EVSYS_DispatchMouseBtnEvent(EVSYS_mouse_btn_event mouse_btn_event);
 
 /*! @brief Dispatch a mouse move event
  *  @param[in] mouse_move_event - event to be dispatched
  */
-void es_dispatch_mouse_move_event(es_mouse_move_event mouse_move_event);
+void EVSYS_DispatchMouseMoveEvent(EVSYS_mouse_move_event mouse_move_event);
 
 /*! @brief Dispatch a quit event
  */
-void es_dispatch_quit_event(void);
+void EVSYS_DispatchQuitEvent(void);
 
 #endif // EVENT_SYSTEM_H

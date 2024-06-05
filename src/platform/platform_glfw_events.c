@@ -11,14 +11,13 @@
 #include <stdio.h>
 #include <GLFW/glfw3.h> // manually compiled GLFW 3.4
 
-#include "logger.h"
 #include "platform_glfw_events.h"
 
 /************************************************************************
 * FUNCTION DEFINITIONS
 ************************************************************************/
 
-key_code translate_keycode(int platform_keycode)
+INTYPES_key_code PLATF_TranslateKeycode(int platform_keycode)
 {
     switch (platform_keycode)
     {

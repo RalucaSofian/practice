@@ -12,9 +12,9 @@
 * DATA TYPES
 ************************************************************************/
 
-/*! @brief Possible key codes 
+/*! @brief Possible keyboard key codes
  */
-typedef enum _key_code
+typedef enum _INTYPES_key_code
 {
     KEY_NONE = 0,
     KEY_SPACE,
@@ -138,6 +138,19 @@ typedef enum _key_code
     KEY_RIGHT_SUPER,
     KEY_MENU,
     KEY_LAST
-}key_code;
+}INTYPES_key_code;
+
+
+/*! @brief Possible states for a key
+ */
+typedef enum _INTYPES_key_state
+{
+    KEY_STATE_RELEASED = 0,
+    KEY_STATE_PRESSED,
+    KEY_STATE_NONE
+}INTYPES_key_state;
+
+
+//! TODO: create enum for mouse buttons
 
 #endif // INPUT_TYPES_H

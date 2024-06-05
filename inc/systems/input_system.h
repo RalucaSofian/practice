@@ -19,22 +19,22 @@
 
 /*! @brief Initialize the Input System
  */
-void input_sys_init(void);
+void INSYS_Init(void);
 
 /*! @brief Get the name of a key as string, based on its key code
  *  @param[in] key_code - keycode for which we need to get the key name
  *  @param[out] key_name - name of the key, as string
  */
-void input_sys_get_key_name(int key_code, const char** key_name);
+void INSYS_GetKeyName(int key_code, const char** key_name);
 
 /*! @brief Get the state of a key (Pressed or Released), based on its key code
  *  @param[in] key_code - keycode for which we need to get the key state
  *  @return state of the key
  */
-int input_sys_get_key_state(int key_code);
+int INSYS_GetKeyState(INTYPES_key_code key_code);
 
-/*! @brief Deinitialize the Input System
+/*! @brief De-initialize the Input System
  */
-void input_sys_deinit(void);
+void INSYS_Deinit(void);
 
 #endif // INPUT_SYSTEM_H

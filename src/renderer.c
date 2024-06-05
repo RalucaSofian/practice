@@ -11,6 +11,7 @@
 ************************************************************************/
 #include <stdio.h>
 
+#include "logger.h"
 #include "platform_renderer.h"
 #include "renderer.h"
 
@@ -18,33 +19,56 @@
 * FUNCTION DEFINITIONS
 ************************************************************************/
 
-void renderer_init(void)
+void REND_Init(void)
 {
-    // platform_renderer_init();
+    PLATF_RendererInit();
 }
 
-void renderer_clear_screen_with_col(renderer_colour colour)
+void REND_Begin(double camera_x, double camera_y)
 {
-    // platform_renderer_clear.....
+    PLATF_RendererBegin(camera_x, camera_y);
 }
 
-
-void renderer_clear_screen(void)
+void REND_PresentScreen(void)
 {
-    // renderer_clear_screen_with_col with default colour
+    PLATF_RendererPresentScreen();
 }
 
-void renderer_draw_rect_with_col(double x, double y, double width, double height, renderer_colour colour)
+void REND_ClearScreenWithCol(REND_colour colour)
 {
-    //platform_renderer....
+    PLATF_RendererClearScreen(colour);
 }
 
-void renderer_draw_rect(double x, double y, double width, double height)
+void REND_ClearScreen(void)
 {
-    //our renderer_draw_rect_with_col with default colour
+    REND_colour default_clear_col = {0};
+
+    default_clear_col.red   = 1.0;
+    default_clear_col.green = 1.0;
+    default_clear_col.blue  = 1.0;
+    default_clear_col.alpha = 1.0;
+
+    REND_ClearScreenWithCol(default_clear_col);
 }
 
-void renderer_deinit(void)
+void REND_DrawRectWithCol(double x, double y, double width, double height, REND_colour colour)
 {
+    PLATF_RendererDrawRect(x, y, width, height, colour);
+}
 
+void REND_DrawRect(double x, double y, double width, double height)
+{
+    REND_colour default_red_col = {0};
+
+    default_red_col.red   = 1.0;
+    default_red_col.green = 0.0;
+    default_red_col.blue  = 0.0;
+    default_red_col.alpha = 1.0;
+
+    PLATF_RendererDrawRect(x, y, width, height, default_red_col);
+}
+
+void REND_Deinit(void)
+{
+    // may not need
 }

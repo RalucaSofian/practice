@@ -5,9 +5,10 @@
  *
  *
  */
-/*********************************************************
+
+/************************************************************************
 * INCLUDES
-*********************************************************/
+************************************************************************/
 #include <stdio.h>
 #include <stdlib.h> // malloc; free...
 #include <time.h>
@@ -16,9 +17,9 @@
 
 #include "logger.h"
 
-/*********************************************************
+/************************************************************************
 * DEFINES
-*********************************************************/
+************************************************************************/
 #define MAX_TIMESTAMP          sizeof(char)*100
 #define ANSI_COLOUR_GREEN      "\033[0;32m"
 #define ANSI_COLOUR_ORANGE     "\033[38;2;255;165;0m"
@@ -26,13 +27,13 @@
 #define ANSI_COLOUR_RESET      "\033[0m"
 #define ASCII_BULLET           "\u2023" // triangular bullet >
 
-/*********************************************************
+/************************************************************************
 * FUNCTION DEFINITIONS
-*********************************************************/
+************************************************************************/
 
-/*  Create timestamp to be used in logs
-*   return timestamp formatted as string
-*/
+/*! @brief Internal function used to create timestamp to be used in logs
+ *  @return timestamp formatted as string
+ */
 static char* logg_timestamp(void)
 {
     char* timestamp = (char*)malloc(MAX_TIMESTAMP);
@@ -57,12 +58,10 @@ static char* logg_timestamp(void)
     return timestamp;
 }
 
-/*  Log a message into the console, formatted as follows:
-*   [timestamp][log level] Log message
-*   [in] - log level
-*   [in] - log message
-*/
-void logg(log_level log_lvl, const char* msg_in, const char* file_name, ...)
+/************************************************************************
+************************************************************************/
+
+void LOGG(LOGG_log_level log_lvl, const char* msg_in, const char* file_name, ...)
 {
     char message[1000];
     va_list args;
@@ -76,28 +75,21 @@ void logg(log_level log_lvl, const char* msg_in, const char* file_name, ...)
     switch(log_lvl)
     {
         case LOGG_VERBOSE:
-        {
             printf("%s [VERB] %-32s %s %s\n", timestamp, trim_file_name, ASCII_BULLET, message);
             break;
-        }
 
         case LOGG_INFO:
-        {
             printf("%s %s[INFO] %-32s %s%s %s\n", timestamp, ANSI_COLOUR_GREEN, trim_file_name, ASCII_BULLET, ANSI_COLOUR_RESET, message);
             break;
-        }
 
         case LOGG_WARN:
-        {
             printf("%s %s[WARN] %-32s %s%s %s\n", timestamp, ANSI_COLOUR_ORANGE, trim_file_name, ASCII_BULLET, ANSI_COLOUR_RESET, message);
             break;
-        }
 
         case LOGG_ERR:
-        {
             printf("%s %s[ERR]  %-32s %s%s %s\n", timestamp, ANSI_COLOUR_RED, trim_file_name, ASCII_BULLET, ANSI_COLOUR_RESET, message);
             break;
-        }
+
         default:
             break;
     }

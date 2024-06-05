@@ -9,16 +9,9 @@
 #define RENDERER_H
 
 /************************************************************************
-* DATA TYPES
+* INCLUDES
 ************************************************************************/
-
-typedef struct _renderer_colour
-{
-    double red;
-    double green;
-    double blue;
-    double alpha;
-}renderer_colour;
+#include "entity_types.h"
 
 /************************************************************************
 * FUNCTION DECLARATIONS
@@ -26,22 +19,46 @@ typedef struct _renderer_colour
 
 /*! @brief Initialize the Renderer
  */
-void renderer_init(void);
+void REND_Init(void);
 
-void renderer_clear_screen_with_col(renderer_colour colour);
+/*! @brief Begin the rendering. Set the initial Camera position
+ *  @param[in] camera_x - position of the camera on the X axis
+ *  @param[in] camera_y - position of the camera on the Y axis
+ */
+void REND_Begin(double camera_x, double camera_y);
 
-void renderer_clear_screen(void);
+/*! @brief Present onto the screen all of the drawn objects
+ */
+void REND_PresentScreen(void);
 
-void renderer_draw_rect_with_col(double x, double y, double width, double height, renderer_colour colour);
+/*! @brief Clear the screen and fill it with a new colour
+ *  @param[in] colour - colour to draw the whole screen to
+ */
+void REND_ClearScreenWithCol(REND_colour colour);
 
-/*! @brief Draw a rectangle
+/*! @brief Clear the screen and fill it with a default colour
+ */
+void REND_ClearScreen(void);
+
+/*! @brief Draw a rectangle. Dimensions in pixels. Origin in the bottom-left corner of window
+ *  @param[in] x - coordinate on the X axis from where to start drawing
+ *  @param[in] y - coordinate on the Y axis from where to start drawing
+ *  @param[in] width - width of the rectangle
+ *  @param[in] height - height of the rectangle
+ *  @param[in] colour - colour of the rectangle
+ */
+void REND_DrawRectWithCol(double x, double y, double width, double height, REND_colour colour);
+
+/*! @brief Draw a rectangle in a default colour. Dimensions in pixels. Origin in the bottom-left corner of window
  *  @param[in] x - coordinate on the X axis from where to start drawing
  *  @param[in] y - coordinate on the Y axis from where to start drawing
  *  @param[in] width - width of the rectangle
  *  @param[in] height - height of the rectangle
  */
-void renderer_draw_rect(double x, double y, double width, double height);
+void REND_DrawRect(double x, double y, double width, double height);
 
-void renderer_deinit(void);
+/*! @brief De-initialize the Renderer
+ */
+void REND_Deinit(void);
 
 #endif // RENDERER_H
