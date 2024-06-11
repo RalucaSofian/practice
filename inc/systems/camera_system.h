@@ -18,18 +18,18 @@
 ************************************************************************/
 
 /*! @brief Initialize the Camera Controller
- *  @param[in] x - initial position of the camera on the X axis
- *  @param[in] y - initial position of the camera on the Y axis
+ *  @param[in] x - initial position of the camera on the X axis [m]
+ *  @param[in] y - initial position of the camera on the Y axis [m]
  */
 void CAMERA_Init(double x, double y);
 
 /*! @brief Get the position of the camera on the X axis
- *  @return position of the camera on the X axis
+ *  @return position of the camera on the X axis [m]
  */
 double CAMERA_GetX(void);
 
 /*! @brief Get the position of the camera on the Y axis
- *  @return position of the camera on the Y axis
+ *  @return position of the camera on the Y axis [m]
  */
 double CAMERA_GetY(void);
 

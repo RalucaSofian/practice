@@ -211,20 +211,20 @@ const GLFWwindow* PLATF_GetWindow(void)
     return (const GLFWwindow*)window;
 }
 
-int PLATF_GetWindowWidth(void)
+double PLATF_GetWindowWidth(void)
 {
     int win_width = 0;
     glfwGetWindowSize(window, &win_width, NULL);
 
-    return win_width;
+    return (double)win_width;
 }
 
-int PLATF_GetWindowHeight(void)
+double PLATF_GetWindowHeight(void)
 {
     int win_height = 0;
     glfwGetWindowSize(window, NULL, &win_height);
 
-    return win_height;
+    return (double)win_height;
 }
 
 void PLATF_Deinit(void)

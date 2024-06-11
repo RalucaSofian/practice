@@ -64,12 +64,12 @@ const GLFWwindow* PLATF_GetWindow(void);
 /*! @brief Get the width of the currently active window
  *  @return window width in pixels
  */
-int PLATF_GetWindowWidth(void);
+double PLATF_GetWindowWidth(void);
 
 /*! @brief Get the height of the currently active window
  *  @return window height in pixels
  */
-int PLATF_GetWindowHeight(void);
+double PLATF_GetWindowHeight(void);
 
 /*! @brief De-initialize the GLFW Library
  */

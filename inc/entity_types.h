@@ -48,13 +48,13 @@ typedef struct _REND_render_info
  */
 typedef struct _PHYS_physics_info
 {
-    double mass;
-    vec2   force;
-    vec2   acceleration;
-    vec2   velocity;
-}PHYS_physics_info; // entity sub-struct
+    double mass;         // [kg]
+    vec2   force;        // [N]
+    vec2   acceleration; // [m/s^2]
+    vec2   velocity;     // [m/s]
+}PHYS_physics_info;
 
-/*! @brief Structure of the transforms applied to entities
+/*! @brief Structure of the transforms applied to all entities
  */
 typedef struct _ENTITY_transform
 {

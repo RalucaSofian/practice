@@ -94,6 +94,12 @@ ENTITY_entity* ENTITY_CreatePlayerEntity(double x, double y,
     player_entity->player_info = (PLAYER_info*)malloc(sizeof(PLAYER_info));
     player_entity->player_info->player_number = player_number;
 
+    player_entity->physics_info = (PHYS_physics_info*)malloc(sizeof(PHYS_physics_info));
+    player_entity->physics_info->mass         = 50;
+    player_entity->physics_info->force        = VEC2_ZERO;
+    player_entity->physics_info->acceleration = VEC2_ZERO;
+    player_entity->physics_info->velocity     = VEC2_ZERO;
+
     return player_entity;
 }
 
@@ -132,6 +138,7 @@ void ENTITY_DestroyEntityById(uint32_t id)
         {
             free(entities[i]->player_info);
             free(entities[i]->render_info);
+            free(entities[i]->physics_info);
             free(entities[i]);
             for(int j = i; j < entity_count-1; j++)
             {
@@ -157,6 +164,11 @@ void ENTITY_DeinitEntities(void)
         if (NULL != entities[i]->render_info)
         {
             free(entities[i]->render_info);
+        }
+
+        if (NULL != entities[i]->physics_info)
+        {
+            free(entities[i]->physics_info);
         }
 
         if (NULL != entities[i])

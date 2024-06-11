@@ -35,10 +35,10 @@ void ENTITY_InitEntities(uint32_t no_of_entities);
 uint32_t ENTITY_GetNoOfEntities(void);
 
 /*! @brief Create a static (non-moving) entity
- *  @param[in] x - coordinate of the entity on the X axis
- *  @param[in] y - coordinate of the entity on the Y axis
- *  @param[in] width - width of the entity
- *  @param[in] height - height of the entity
+ *  @param[in] x - coordinate of the entity on the X axis [m]
+ *  @param[in] y - coordinate of the entity on the Y axis [m]
+ *  @param[in] width - width of the entity [m]
+ *  @param[in] height - height of the entity [m]
  *  @param[in] colour - colour of the entity
  *  @return pointer to the newly created entity
  */
@@ -47,10 +47,10 @@ ENTITY_entity* ENTITY_CreateStaticEntity(double x, double y,
                                          REND_colour colour);
 
 /*! @brief Create a player entity
- *  @param[in] x - coordinate of the entity on the X axis
- *  @param[in] y - coordinate of the entity on the Y axis
- *  @param[in] width - width of the entity
- *  @param[in] height - height of the entity
+ *  @param[in] x - coordinate of the entity on the X axis [m]
+ *  @param[in] y - coordinate of the entity on the Y axis [m]
+ *  @param[in] width - width of the entity [m]
+ *  @param[in] height - height of the entity [m]
  *  @param[in] colour - colour of the entity
  *  @param[in] player_number - player number
  *  @return pointer to the newly created entity

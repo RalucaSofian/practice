@@ -33,11 +33,16 @@ void PHYS_ResetForce(ENTITY_entity* entity);
  */
 void PHYS_ApplyForce(ENTITY_entity* entity, vec2 force);
 
-/*! @brief Update the entity's physics properties when time_delta expires
+/*! @brief Apply all the default forces on an entity
  *  @param[in] entity - entity that needs to be updated
- *  @param[in] time_delta - time delta for entity updates [sec]
  */
-void PHYS_UpdateEntity(ENTITY_entity* entity, double time_delta);
+void PHYS_ApplyDefaultForces(ENTITY_entity* entity);
+
+/*! @brief Update the entity's physics properties when time_delta expires
+ *  @param[in] time_delta - time delta for entity updates [sec]
+ *  @param[in] entity - entity that needs to be updated
+ */
+void PHYS_UpdateEntity(double time_delta, ENTITY_entity* entity);
 
 /*! @brief De-initialize the Physics System
  */

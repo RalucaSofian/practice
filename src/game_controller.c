@@ -17,6 +17,7 @@
 #include "player_system.h"
 #include "camera_system.h"
 #include "render_system.h"
+#include "physics_system.h"
 #include "entity_types.h"
 #include "game_controller.h"
 
@@ -74,61 +75,61 @@ static void kb_quit_handler(EVSYS_kb_event* kb_event)
 
 void GAMECTRL_Init(void)
 {
-    CAMERA_Init(25.0, 25.0);
+    CAMERA_Init(0.0, 0.0);
     kb_quit_handler_id = EVSYS_SubscribeKbEvent(kb_quit_handler);
     ENTITY_InitEntities(STARTING_NO_OF_ENTITIES);
     PLAYER_Init();
 
-    const ENTITY_entity* static_entity1 = ENTITY_CreateStaticEntity(100.0,
-                                                                    100.0,
-                                                                    50.0,
-                                                                    50.0,
+    const ENTITY_entity* static_entity1 = ENTITY_CreateStaticEntity(1.0,
+                                                                    1.0,
+                                                                    0.5,
+                                                                    0.5,
                                                                     col_black);
     LOGG_info("Static Entity 1 ID = %d", static_entity1->id);
 
-    const ENTITY_entity* static_entity2 = ENTITY_CreateStaticEntity(200.0,
-                                                                    100.0,
-                                                                    50.0,
-                                                                    50.0,
+    const ENTITY_entity* static_entity2 = ENTITY_CreateStaticEntity(2.0,
+                                                                    1.0,
+                                                                    0.5,
+                                                                    0.5,
                                                                     col_grey_dark);
     LOGG_info("Static Entity 2 ID = %d", static_entity2->id);
 
-    const ENTITY_entity* static_entity3 = ENTITY_CreateStaticEntity(300.0,
-                                                                    100.0,
-                                                                    50.0,
-                                                                    50.0,
+    const ENTITY_entity* static_entity3 = ENTITY_CreateStaticEntity(3.0,
+                                                                    1.0,
+                                                                    0.5,
+                                                                    0.5,
                                                                     col_grey);
     LOGG_info("Static Entity 3 ID = %d", static_entity3->id);
 
-    const ENTITY_entity* static_entity4 = ENTITY_CreateStaticEntity(400.0,
-                                                                    100.0,
-                                                                    50.0,
-                                                                    50.0,
+    const ENTITY_entity* static_entity4 = ENTITY_CreateStaticEntity(4.0,
+                                                                    1.0,
+                                                                    0.5,
+                                                                    0.5,
                                                                     col_grey_light);
     LOGG_info("Static Entity 4 ID = %d", static_entity4->id);
 
-    const ENTITY_entity* static_entity5 = ENTITY_CreateStaticEntity(500.0,
-                                                                    100.0,
-                                                                    50.0,
-                                                                    50.0,
+    const ENTITY_entity* static_entity5 = ENTITY_CreateStaticEntity(5.0,
+                                                                    1.0,
+                                                                    0.5,
+                                                                    0.5,
                                                                     col_green);
     LOGG_info("Static Entity 5 ID = %d", static_entity5->id);
 
-    ENTITY_entity* player_one = ENTITY_CreatePlayerEntity(100.0,
-                                                          100.0,
-                                                          50.0,
-                                                          100.0,
+    ENTITY_entity* player_one = ENTITY_CreatePlayerEntity(1.0,
+                                                          1.5,
+                                                          0.5,
+                                                          2.0,
                                                           col_blue,
                                                           1);
     LOGG_info("Player One ID = %d", player_one->id);
 
-    ENTITY_entity* player_two = ENTITY_CreatePlayerEntity(1000.0,
-                                                          100.0,
-                                                          50.0,
-                                                          100.0,
-                                                          col_red,
-                                                          2);
-    LOGG_info("Player Two ID = %d", player_two->id);
+    // ENTITY_entity* player_two = ENTITY_CreatePlayerEntity(10.0,
+    //                                                       1.5,
+    //                                                       0.5,
+    //                                                       2.0,
+    //                                                       col_red,
+    //                                                       2);
+    // LOGG_info("Player Two ID = %d", player_two->id);
 }
 
 void GAMECTRL_Update(double time_delta)
@@ -141,6 +142,17 @@ void GAMECTRL_Update(double time_delta)
         if (NULL != entity->player_info)
         {
             PLAYER_Update(time_delta, entity);
+        }
+
+        if (NULL != entity->physics_info)
+        {
+            PHYS_ResetForce(entity);
+            PHYS_ApplyDefaultForces(entity);
+            PHYS_UpdateEntity(time_delta, entity);
+        }
+
+        if (NULL != entity->player_info)
+        {
             CAMERA_Update(time_delta, entity);
         }
     }
@@ -148,8 +160,8 @@ void GAMECTRL_Update(double time_delta)
 
 void GAMECTRL_Render(void)
 {
-    REND_Begin(CAMERA_GetX(), CAMERA_GetY());
-    REND_ClearScreenWithCol(col_white);
+    RENDSYS_Begin(CAMERA_GetX(), CAMERA_GetY());
+    RENDSYS_ClearScreenWithCol(col_white);
 
     // Render all entities, if they have Render Info
     ENTITY_entity* entity       = NULL;
@@ -163,7 +175,7 @@ void GAMECTRL_Render(void)
         }
     }
 
-    REND_PresentScreen();
+    RENDSYS_PresentScreen();
 }
 
 void GAMECTRL_Deinit(void)

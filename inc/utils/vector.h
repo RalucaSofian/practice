@@ -21,6 +21,16 @@ typedef struct _vec2
 }vec2;
 
 /************************************************************************
+* CONSTANTS
+************************************************************************/
+
+const extern vec2 VEC2_UP;    // default UP unit vector
+const extern vec2 VEC2_DOWN;  // default DOWN unit vector
+const extern vec2 VEC2_LEFT;  // default LEFT unit vector
+const extern vec2 VEC2_RIGHT; // default RIGHT unit vector
+const extern vec2 VEC2_ZERO;  // default ZERO 2D vector
+
+/************************************************************************
 * FUNCTION DECLARATIONS
 ************************************************************************/
 

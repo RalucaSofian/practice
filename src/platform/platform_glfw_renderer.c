@@ -15,8 +15,8 @@
 #include "platform.h"
 #include "platform_renderer.h"
 
-int win_width;  // window width
-int win_height; // window height
+int win_width;  // window width [px]
+int win_height; // window height [px]
 
 /************************************************************************
 * FUNCTION DEFINITIONS
