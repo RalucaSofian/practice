@@ -14,6 +14,10 @@
 #include "renderer.h"
 #include "entity_types.h"
 
+const extern PLAYER_key_map KEY_MAP_WASD;
+const extern PLAYER_key_map KEY_MAP_ARROWS;
+const extern vec2           INITIAL_PLAYER_POS;
+
 /************************************************************************
 * FUNCTION DECLARATIONS
 ************************************************************************/

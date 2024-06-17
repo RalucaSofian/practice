@@ -9,7 +9,7 @@
 * INCLUDES
 ************************************************************************/
 #include <stdio.h>
-#include <GLFW/glfw3.h> // manually compiled GLFW 3.4
+#include <GLFW/glfw3.h>
 
 #include "platform_glfw_events.h"
 

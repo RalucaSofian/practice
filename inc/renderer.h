@@ -57,6 +57,15 @@ void REND_DrawRectWithCol(double x, double y, double width, double height, REND_
  */
 void REND_DrawRect(double x, double y, double width, double height);
 
+/*! @brief Draw a line
+ *  @param[in] a_x - coordinate on the X axis from where to start drawing
+ *  @param[in] a_y - coordinate on the Y axis from where to start drawing
+ *  @param[in] b_x - coordinate on the X axis where to end drawing
+ *  @param[in] b_y - coordinate on the Y axis where to end drawing
+ *  @param[in] colour - colour of the line
+ */
+void REND_DrawLineWithCol(double a_x, double a_y, double b_x, double b_y, REND_colour colour);
+
 /*! @brief De-initialize the Renderer
  */
 void REND_Deinit(void);

@@ -11,14 +11,22 @@
 ************************************************************************/
 #include <stdio.h>
 
-#include "input_system.h"
 #include "logger.h"
+#include "vector.h"
+#include "input_system.h"
+#include "physics_system.h"
 #include "player_system.h"
+
+
+const PLAYER_key_map KEY_MAP_WASD   = {.key_up = KEY_W, .key_left = KEY_A, .key_down = KEY_S, .key_right = KEY_D};
+const PLAYER_key_map KEY_MAP_ARROWS = {.key_up = KEY_UP, .key_left = KEY_LEFT, .key_down = KEY_DOWN, .key_right = KEY_RIGHT};
+const vec2           INITIAL_PLAYER_POS = {.x = 1.0, .y = 2.0};
 
 /************************************************************************
 * GLOBAL VARIABLES
 ************************************************************************/
-double player_move_speed = 1.0; // player speed in m/sec
+const double PLAYER_MOVEMENT_FORCE = 2000.0;
+const double PLAYER_JUMP_FORCE     = 30000.0;
 
 /************************************************************************
 * FUNCTION DEFINITIONS
@@ -31,53 +39,38 @@ void PLAYER_Init(void)
 
 void PLAYER_Update(double time_delta, ENTITY_entity* entity)
 {
-    INTYPES_key_code key_up    = KEY_W;
-    INTYPES_key_code key_left  = KEY_A;
-    INTYPES_key_code key_down  = KEY_S;
-    INTYPES_key_code key_right = KEY_D;
-
     if ((NULL == entity) || (NULL == entity->player_info))
     {
         return;
     }
 
     // TEST
-    double velocity = VEC2_len(entity->physics_info->velocity);
-    LOGG_verbose("Player Vel: %f m/s", velocity);
-    //TEST
+    // double velocity = VEC2_len(entity->physics_info->velocity);
+    // LOGG_verbose("Player Vel: %f m/s; is_on_ground: %d", velocity, entity->physics_info->is_on_ground);
+    // TEST
 
-    //! TODO: replace 2
-    if (2 == entity->player_info->player_number)
+    INTYPES_key_state up_state = INSYS_GetKeyState(entity->player_info->key_map.key_up);
+    if ((KEY_STATE_PRESSED == up_state) && (true == entity->physics_info->is_on_ground))
     {
-        key_up    = KEY_UP;
-        key_left  = KEY_LEFT;
-        key_down  = KEY_DOWN;
-        key_right = KEY_RIGHT;
+        PHYS_ApplyForce(entity, VEC2_scale(VEC2_UP, PLAYER_JUMP_FORCE));
     }
 
-    INTYPES_key_state up_state = INSYS_GetKeyState(key_up);
-    if (KEY_STATE_PRESSED == up_state)
-    {
-        //! TODO: apply forces instead
-        entity->transform.position.y += (player_move_speed*time_delta);
-    }
-
-    INTYPES_key_state left_state = INSYS_GetKeyState(key_left);
+    INTYPES_key_state left_state = INSYS_GetKeyState(entity->player_info->key_map.key_left);
     if (KEY_STATE_PRESSED == left_state)
     {
-        entity->transform.position.x -= (player_move_speed*time_delta);
+        PHYS_ApplyForce(entity, VEC2_scale(VEC2_LEFT, PLAYER_MOVEMENT_FORCE));
     }
 
-    INTYPES_key_state down_state = INSYS_GetKeyState(key_down);
+    INTYPES_key_state down_state = INSYS_GetKeyState(entity->player_info->key_map.key_down);
     if (KEY_STATE_PRESSED == down_state)
     {
-        entity->transform.position.y -= (player_move_speed*time_delta);
+        PHYS_ApplyForce(entity, VEC2_scale(VEC2_DOWN, PLAYER_MOVEMENT_FORCE));
     }
 
-    INTYPES_key_state right_state = INSYS_GetKeyState(key_right);
+    INTYPES_key_state right_state = INSYS_GetKeyState(entity->player_info->key_map.key_right);
     if (KEY_STATE_PRESSED == right_state)
     {
-        entity->transform.position.x += (player_move_speed*time_delta);
+        PHYS_ApplyForce(entity, VEC2_scale(VEC2_RIGHT, PLAYER_MOVEMENT_FORCE));
     }
 }
 

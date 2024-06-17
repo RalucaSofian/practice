@@ -22,7 +22,7 @@
 ENTITY_entity** entities;                // array of pointers, of type 'entity'
 uint32_t        entity_count    = 0;     // index of entities [0; max]
 uint32_t        last_entity_id  = 0;     // ID of last added entity [1; max]
-uint32_t        entity_capacity = 0;     //
+uint32_t        entity_capacity = 0;
 
 /************************************************************************
 * FUNCTION DEFINITIONS
@@ -43,6 +43,7 @@ static void check_entity_capacity(void)
         LOGG_info("Expanded: entity_count = %d; entity_capacity = %d", entity_count, entity_capacity);
     }
 }
+
 
 /************************************************************************
 ************************************************************************/
@@ -87,18 +88,21 @@ ENTITY_entity* ENTITY_CreateStaticEntity(double x, double y,
 
 ENTITY_entity* ENTITY_CreatePlayerEntity(double x, double y,
                                          double width, double height,
-                                         REND_colour colour, int player_number)
+                                         REND_colour colour,
+                                         int player_number, PLAYER_key_map key_map)
 {
     ENTITY_entity* player_entity = ENTITY_CreateStaticEntity(x, y, width, height, colour);
 
     player_entity->player_info = (PLAYER_info*)malloc(sizeof(PLAYER_info));
     player_entity->player_info->player_number = player_number;
+    player_entity->player_info->key_map = key_map;
 
     player_entity->physics_info = (PHYS_physics_info*)malloc(sizeof(PHYS_physics_info));
     player_entity->physics_info->mass         = 50;
     player_entity->physics_info->force        = VEC2_ZERO;
     player_entity->physics_info->acceleration = VEC2_ZERO;
     player_entity->physics_info->velocity     = VEC2_ZERO;
+    player_entity->physics_info->is_on_ground = false;
 
     return player_entity;
 }

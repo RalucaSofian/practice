@@ -115,8 +115,6 @@ int PLATF_Init(void)
     int ret_val = 0;
 
     // Set Hints (pre-init)
-    // set Platform to Wayland
-    glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
     // disable LibDecor
     glfwInitHint(GLFW_WAYLAND_LIBDECOR, GLFW_WAYLAND_DISABLE_LIBDECOR);
 
@@ -165,7 +163,7 @@ void PLATF_MainLoop(PLATF_glfw_hooks pltf_hooks)
     // Set cb for cursor position (relative to top-left corner of window)
     glfwSetCursorPosCallback(window, cursor_pos_cb);
 
-    double old_time;
+    double old_time = glfwGetTime();
     double crt_time;
     double time_delta;
     

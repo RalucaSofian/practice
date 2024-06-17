@@ -52,3 +52,11 @@ void RENDSYS_DrawEntity(ENTITY_entity* entity)
                          entity->render_info->colour);
 }
 
+void RENDSYS_DrawLine(vec2 a, vec2 b, REND_colour colour)
+{
+    REND_DrawLineWithCol(CONV_MetersToPixels(a.x),
+                         CONV_MetersToPixels(a.y),
+                         CONV_MetersToPixels(b.x),
+                         CONV_MetersToPixels(b.y),
+                         colour);
+}

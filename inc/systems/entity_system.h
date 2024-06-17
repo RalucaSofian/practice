@@ -57,7 +57,8 @@ ENTITY_entity* ENTITY_CreateStaticEntity(double x, double y,
  */
 ENTITY_entity* ENTITY_CreatePlayerEntity(double x, double y,
                                          double width, double height,
-                                         REND_colour colour, int player_number);
+                                         REND_colour colour,
+                                         int player_number, PLAYER_key_map key_map);
 
 // /*! @brief Create a dynamic (moving) entity
 //  *  @param[in] x - coordinate of the entity on the X axis

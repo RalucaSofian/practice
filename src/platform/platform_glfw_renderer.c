@@ -10,7 +10,7 @@
 * INCLUDES
 ************************************************************************/
 #include <stdio.h>
-#include <GLFW/glfw3.h> // manually compiled GLFW 3.4
+#include <GLFW/glfw3.h>
 
 #include "platform.h"
 #include "platform_renderer.h"
@@ -61,6 +61,16 @@ void PLATF_RendererDrawRect(double x, double y, double width, double height, REN
         glVertex3f(x+width, y, 0.0);        // Bottom Right
         glVertex3f(x+width, y+height, 0.0); // Top Right
         glVertex3f(x, y+height, 0.0);       // Top Left
+    glEnd();
+}
+
+void PLATF_RendererDrawLine(double a_x, double a_y, double b_x, double b_y, REND_colour colour)
+{
+    glColor4f(colour.red, colour.green, colour.blue, colour.alpha);
+
+    glBegin(GL_LINES);
+        glVertex3f(a_x, a_y, 1.0); // point (a_x; a_y)
+        glVertex3f(b_x, b_y, 1.0); // point (b_x; b_y)
     glEnd();
 }
 

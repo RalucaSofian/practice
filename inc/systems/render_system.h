@@ -11,6 +11,7 @@
 /************************************************************************
 * INCLUDES
 ************************************************************************/
+#include "vector.h"
 #include "entity_system.h"
 
 /************************************************************************
@@ -36,5 +37,12 @@ void RENDSYS_ClearScreenWithCol(REND_colour colour);
  *  @param[in] entity - entity that needs to be drawn
  */
 void RENDSYS_DrawEntity(ENTITY_entity* entity);
+
+/*! @brief Draw a line
+ *  @param[in] a - coordinates from where to start drawing [m]
+ *  @param[in] b - coordinates where to end drawing [m]
+ *  @param[in] colour - colour of the line
+ */
+void RENDSYS_DrawLine(vec2 a, vec2 b, REND_colour colour);
 
 #endif // RENDER_SYSTEM_H

@@ -11,16 +11,72 @@
 ************************************************************************/
 #include <stdio.h>
 
+#include "logger.h"
+#include "collisions.h"
+#include "entity_system.h"
+#include "input_system.h"
 #include "physics_system.h"
 
 /************************************************************************
 * GLOBAL VARIABLES
 ************************************************************************/
-const vec2 GRAVITY_ACC = {.x = 0.0, .y = -9.81};
-const double FRICTION_COEF = 0.5 * 1.225 * 1.09 * 1.0; // 0.5 * air density * drag coef of a cube * cross sectional area of a unit cube
+const vec2   GRAVITY_ACC          = {.x = 0.0, .y = -9.81}; // gravity acceleration
+const double AIR_FRICTION_COEF    = 0.5 * 1.225 * 1.09 * 1.0 * 20; // 0.5 * air density * drag coef of a cube * cross sectional area of a unit cube * k
+const double GROUND_FRICTION_COEF = 1.0;
 
 /************************************************************************
 * FUNCTION DEFINITIONS
+************************************************************************/
+
+/*! @brief Internal function used for checking for entity collisions
+ *  @param[in] entity - entity for which we need to check for collisions
+ */
+static void check_collisions(ENTITY_entity* entity)
+{
+    entity->physics_info->is_on_ground = false;
+    uint32_t entity_no = ENTITY_GetNoOfEntities();
+    for (int i = 0; i < entity_no; i++)
+    {
+        ENTITY_entity* other_entity = ENTITY_GetEntityByIndex(i);
+        if (entity->id != other_entity->id)
+        {
+            double overlap_x = COLL_GetEntityOverlapX(entity, other_entity);
+            double overlap_y = COLL_GetEntityOverlapY(entity, other_entity);
+            if ((overlap_x >= 0.0) && (overlap_y >= 0.0))
+            {
+                // LOGG_info("Collision detected. Entity IDs: %d and %d; Overlaps: X = %f Y = %f", entity->id, other_entity->id, overlap_x, overlap_y);
+                if (overlap_x < overlap_y)
+                {
+                    if (entity->physics_info->velocity.x > 0.0)
+                    {
+                        entity->transform.position.x -= overlap_x;
+                    }
+                    else
+                    {
+                        entity->transform.position.x += overlap_x;
+                    }
+                    entity->physics_info->velocity.x = 0.0;
+                }
+                else
+                {
+                    if (entity->physics_info->velocity.y > 0.0)
+                    {
+                        entity->transform.position.y -= overlap_y;
+                    }
+                    else
+                    {
+                        entity->transform.position.y += overlap_y;
+                        entity->physics_info->is_on_ground = true;
+                    }
+                    entity->physics_info->velocity.y = 0.0;
+                }
+            }
+        }
+    }
+}
+
+
+/************************************************************************
 ************************************************************************/
 
 void PHYS_Init(void)
@@ -50,23 +106,38 @@ void PHYS_ApplyDefaultForces(ENTITY_entity* entity)
     PHYS_ApplyForce(entity, VEC2_scale(GRAVITY_ACC, entity->physics_info->mass));
 
     // Apply air friction
-    // Fd = (-v/len(v)) * len(Fd); len(Fd) = FRICTION_COEF * len(v)^2
+    // Fd = (-v/len(v)) * len(Fd); len(Fd) = AIR_FRICTION_COEF * len(v)^2
     vec2 velocity = entity->physics_info->velocity;
     double velocity_magnitude = VEC2_len(velocity);
-    if (0 < velocity_magnitude)
+    if (velocity_magnitude > 0)
     {
-        double friction_magnitude = FRICTION_COEF * velocity_magnitude * velocity_magnitude;
         vec2 friction_dir = VEC2_scale(velocity, -1.0/velocity_magnitude);
+        double friction_magnitude = AIR_FRICTION_COEF * velocity_magnitude * velocity_magnitude;
         PHYS_ApplyForce(entity, VEC2_scale(friction_dir, friction_magnitude));
+
+        if (true == entity->physics_info->is_on_ground)
+        {
+            // if speed is negligible
+            if ((entity->physics_info->velocity.x >= -0.1) &&
+                (entity->physics_info->velocity.x <= 0.1))
+            {
+                entity->physics_info->velocity.x = 0.0;
+            }
+            else // if entity is moving
+            {
+                // only apply friction if it does NOT conflict with player input
+                INTYPES_key_state left_state  = INSYS_GetKeyState(entity->player_info->key_map.key_left);
+                INTYPES_key_state right_state = INSYS_GetKeyState(entity->player_info->key_map.key_right);
+
+                if (((friction_dir.x > 0) && (KEY_STATE_PRESSED != left_state)) ||
+                    ((friction_dir.x < 0) && (KEY_STATE_PRESSED != right_state)))
+                {
+                    friction_magnitude = GROUND_FRICTION_COEF * entity->physics_info->mass * VEC2_len(GRAVITY_ACC);
+                    PHYS_ApplyForce(entity, VEC2_scale(friction_dir, friction_magnitude));
+                }
+            }
+        }
     }
-}
-
-void check_collisions(ENTITY_entity* entity)
-{
-    // check for overlap
-        // utils: check_entity_overlap_x(entity1, entity2); ret meters overlap on x dir
-        // utils: check_entity_overlap_y(entity1, entity2); ret meters overlap on y dir
-
 }
 
 void PHYS_UpdateEntity(double time_delta, ENTITY_entity* entity)
@@ -87,7 +158,7 @@ void PHYS_UpdateEntity(double time_delta, ENTITY_entity* entity)
     entity->transform.position = VEC2_add(entity->transform.position,
                                           VEC2_scale(entity->physics_info->velocity, time_delta));
 
-    // call check_collisions
+    check_collisions(entity);
 
 }
 

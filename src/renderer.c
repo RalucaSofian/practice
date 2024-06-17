@@ -68,6 +68,11 @@ void REND_DrawRect(double x, double y, double width, double height)
     PLATF_RendererDrawRect(x, y, width, height, default_red_col);
 }
 
+void REND_DrawLineWithCol(double a_x, double a_y, double b_x, double b_y, REND_colour colour)
+{
+    PLATF_RendererDrawLine(a_x, a_y, b_x, b_y, colour);
+}
+
 void REND_Deinit(void)
 {
     // may not need

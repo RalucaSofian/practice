@@ -57,7 +57,7 @@ int last_handler_id = 0;
  */
 static int register_event_handler(EVSYS_internal_evt_handler handler)
 {
-    /* save handler internally */
+    // save handler internally
     for (int i = 0; i < MAX_NO_OF_HANDLERS; i++)
     {
         if (NULL == all_handlers[i].event_handler)
@@ -142,6 +142,7 @@ static void dispatch_event(EVSYS_internal_event event)
         }
     }
 }
+
 
 /************************************************************************
 ************************************************************************/

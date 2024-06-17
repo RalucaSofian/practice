@@ -12,19 +12,30 @@
 * INCLUDES
 ************************************************************************/
 #include <stdint.h>
+#include <stdbool.h>
 
+#include "input_types.h"
 #include "vector.h"
 
 /************************************************************************
 * DATA TYPES
 ************************************************************************/
 
+typedef struct _PLAYER_key_map
+{
+    INTYPES_key_code key_up;
+    INTYPES_key_code key_left;
+    INTYPES_key_code key_down;
+    INTYPES_key_code key_right;
+}PLAYER_key_map;
+
 /*! @brief Structure of the player information
  */
 typedef struct _PLAYER_info
 {
-    int player_number;
-    int health;
+    int            player_number;
+    int            health;
+    PLAYER_key_map key_map;
 }PLAYER_info;
 
 /*! @brief Structure of the renderable colours
@@ -52,6 +63,7 @@ typedef struct _PHYS_physics_info
     vec2   force;        // [N]
     vec2   acceleration; // [m/s^2]
     vec2   velocity;     // [m/s]
+    bool   is_on_ground; // true/false
 }PHYS_physics_info;
 
 /*! @brief Structure of the transforms applied to all entities
