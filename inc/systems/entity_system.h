@@ -53,6 +53,7 @@ ENTITY_entity* ENTITY_CreateStaticEntity(double x, double y,
  *  @param[in] height - height of the entity [m]
  *  @param[in] colour - colour of the entity
  *  @param[in] player_number - player number
+ *  @param[in] key_map - player key map (WASD or Arrows)
  *  @return pointer to the newly created entity
  */
 ENTITY_entity* ENTITY_CreatePlayerEntity(double x, double y,

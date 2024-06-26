@@ -29,4 +29,11 @@ double CONV_PixelsToMeters(int pixels);
  */
 int CONV_MetersToPixels(double meters);
 
+/*! @brief Convert a string representing the colour (written as 6 hexadecimal digits for RGB)
+ *  into a renderable colour
+ *  @param[in] hex_col - string representing the hex colour
+ *  @return a render colour
+ */
+REND_colour CONV_HexToColour(char* hex_col);
+
 #endif // CONVERSIONS_H

@@ -20,7 +20,6 @@
 * DEFINES
 ************************************************************************/
 #define UPD_FREQ_HZ         100 // freq for the game logic update [Hz]
-// #define TIME_UPD
 
 /************************************************************************
 * GLOBAL VARIABLES
@@ -108,8 +107,10 @@ static void cursor_pos_cb(GLFWwindow* window, double xpos, double ypos)
     // LOGG_info("Mouse Coordinates: XPos = %f YPos = %f", xpos, ypos);
 }
 
+
 /************************************************************************
 ************************************************************************/
+
 int PLATF_Init(void)
 {
     int ret_val = 0;
@@ -189,10 +190,11 @@ void PLATF_MainLoop(PLATF_glfw_hooks pltf_hooks)
             #endif
             
             pltf_hooks.update_hook(time_delta);
-            
+
             #ifdef TIME_UPD
                 LOGG_info("Upd Hook Duration: %f us", (glfwGetTime()-upd_start_time)*1000000);
             #endif
+
             old_time = crt_time;
         }
 

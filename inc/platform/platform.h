@@ -45,9 +45,9 @@ typedef struct _PLATF_glfw_hooks
 int PLATF_Init(void);
 
 /*! @brief Create GLFW window and bring it into focus
- *  @param[in] title  - window title
- *  @param[in] width  - window width in pixels
- *  @param[in] height - window height in pixels
+ *  @param[in] title - window title
+ *  @param[in] width - window width [px]
+ *  @param[in] height - window height [px]
  *  @return 0 if creation was successful, -1 otherwise
  */
 int PLATF_CreateWindow(const char* title, int width, int height);

@@ -20,7 +20,8 @@
 /************************************************************************
 * DATA TYPES
 ************************************************************************/
-
+/*! @brief Structure of the player key map
+ */
 typedef struct _PLAYER_key_map
 {
     INTYPES_key_code key_up;

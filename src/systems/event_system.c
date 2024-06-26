@@ -10,6 +10,7 @@
 * INCLUDES
 ************************************************************************/
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "logger.h"
 #include "event_system.h"
@@ -230,7 +231,7 @@ void EVSYS_DispatchKbEvent(EVSYS_kb_event kb_event)
 
     // Prepare internal event
     tmp_event.event_type = EVT_KEYBOARD;
-    tmp_event.event_data = &kb_event; //! FIX: this will explode
+    tmp_event.event_data = &kb_event;
 
     dispatch_event(tmp_event);
 }
@@ -241,7 +242,7 @@ void EVSYS_DispatchMouseBtnEvent(EVSYS_mouse_btn_event mouse_btn_event)
 
     // Prepare internal event
     tmp_event.event_type = EVT_MOUSE_BTN;
-    tmp_event.event_data = &mouse_btn_event; //! FIX: this will explode
+    tmp_event.event_data = &mouse_btn_event;
 
     dispatch_event(tmp_event);
 }
@@ -252,7 +253,7 @@ void EVSYS_DispatchMouseMoveEvent(EVSYS_mouse_move_event mouse_move_event)
 
     // Prepare internal event
     tmp_event.event_type = EVT_MOUSE_MOVE;
-    tmp_event.event_data = &mouse_move_event; //! FIX: this will explode
+    tmp_event.event_data = &mouse_move_event;
 
     dispatch_event(tmp_event);
 }

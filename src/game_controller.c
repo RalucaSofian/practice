@@ -19,6 +19,7 @@
 #include "render_system.h"
 #include "physics_system.h"
 #include "entity_types.h"
+#include "level_system.h"
 #include "game_controller.h"
 
 /************************************************************************
@@ -97,62 +98,13 @@ static void player_reset_handler(EVSYS_kb_event* kb_event)
 void GAMECTRL_Init(void)
 {
     CAMERA_Init(0.0, 0.0);
+
     player_reset_handler_id = EVSYS_SubscribeKbEvent(player_reset_handler);
-    kb_quit_handler_id = EVSYS_SubscribeKbEvent(kb_quit_handler);
+    kb_quit_handler_id      = EVSYS_SubscribeKbEvent(kb_quit_handler);
+
     ENTITY_InitEntities(STARTING_NO_OF_ENTITIES);
+    LVLSYS_LoadLevel();
     PLAYER_Init();
-
-    const ENTITY_entity* floor = ENTITY_CreateStaticEntity(-10.0,
-                                                           1.0,
-                                                           100.0,
-                                                           0.5,
-                                                           col_black);
-    LOGG_info("Floor Entity ID = %d", floor->id);
-
-    const ENTITY_entity* static_entity2 = ENTITY_CreateStaticEntity(2.0,
-                                                                    1.5,
-                                                                    0.5,
-                                                                    0.5,
-                                                                    col_grey_dark);
-    LOGG_info("Static Entity 2 ID = %d", static_entity2->id);
-
-    const ENTITY_entity* static_entity3 = ENTITY_CreateStaticEntity(3.0,
-                                                                    1.5,
-                                                                    0.5,
-                                                                    0.5,
-                                                                    col_grey);
-    LOGG_info("Static Entity 3 ID = %d", static_entity3->id);
-
-    const ENTITY_entity* static_entity4 = ENTITY_CreateStaticEntity(4.0,
-                                                                    1.5,
-                                                                    0.5,
-                                                                    0.5,
-                                                                    col_grey_light);
-    LOGG_info("Static Entity 4 ID = %d", static_entity4->id);
-
-    const ENTITY_entity* static_entity5 = ENTITY_CreateStaticEntity(5.0,
-                                                                    1.5,
-                                                                    0.5,
-                                                                    0.5,
-                                                                    col_green);
-    LOGG_info("Static Entity 5 ID = %d", static_entity5->id);
-
-    ENTITY_entity* player_one = ENTITY_CreatePlayerEntity(INITIAL_PLAYER_POS.x,
-                                                          INITIAL_PLAYER_POS.y,
-                                                          0.5,
-                                                          2.0,
-                                                          col_grey,
-                                                          1,
-                                                          KEY_MAP_WASD);
-    LOGG_info("Player One ID = %d", player_one->id);
-
-    // ENTITY_entity* player_two = ENTITY_CreatePlayerEntity(10.0,
-    //                                                       1.5,
-    //                                                       0.5,
-    //                                                       2.0,
-    //                                                       col_red,
-    //                                                       2);
-    // LOGG_info("Player Two ID = %d", player_two->id);
 }
 
 void GAMECTRL_Update(double time_delta)
@@ -199,7 +151,7 @@ void GAMECTRL_Render(void)
         if (NULL != entity->render_info)
         {
             RENDSYS_DrawEntity(entity);
-            // DEBUG: Draw forces applied on to the player entity
+            //! DEBUG: Draw forces applied on to the player entity
             // if entity we've just drawn was a player
             if (NULL != entity->player_info)
             {
@@ -215,7 +167,7 @@ void GAMECTRL_Render(void)
                                  scaled_force,
                                  col_red);
 
-                // draw veloocity as a line
+                // draw velocity as a line
                 // scale velocity down and translate it for drawing
                 vec2 scaled_velocity = VEC2_scale(entity->physics_info->velocity, 1.0/10.0);
                 scaled_velocity = VEC2_add(player_center, scaled_velocity);
@@ -223,6 +175,7 @@ void GAMECTRL_Render(void)
                                  scaled_velocity,
                                  col_green);
             }
+            //! DEBUG: End
         }
     }
 

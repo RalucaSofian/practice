@@ -78,6 +78,9 @@ ENTITY_entity* ENTITY_CreateStaticEntity(double x, double y,
     new_static_entity->render_info = (REND_render_info*)malloc(sizeof(REND_render_info));
     new_static_entity->render_info->colour = colour;
 
+    new_static_entity->player_info  = NULL;
+    new_static_entity->physics_info = NULL;
+
     entity_count++;
 
     // Check how much space we have left
@@ -91,11 +94,12 @@ ENTITY_entity* ENTITY_CreatePlayerEntity(double x, double y,
                                          REND_colour colour,
                                          int player_number, PLAYER_key_map key_map)
 {
+    // Start from a non-moving entity
     ENTITY_entity* player_entity = ENTITY_CreateStaticEntity(x, y, width, height, colour);
 
     player_entity->player_info = (PLAYER_info*)malloc(sizeof(PLAYER_info));
     player_entity->player_info->player_number = player_number;
-    player_entity->player_info->key_map = key_map;
+    player_entity->player_info->key_map       = key_map;
 
     player_entity->physics_info = (PHYS_physics_info*)malloc(sizeof(PHYS_physics_info));
     player_entity->physics_info->mass         = 50;
@@ -116,6 +120,7 @@ ENTITY_entity* ENTITY_CreatePlayerEntity(double x, double y,
 
 ENTITY_entity* ENTITY_GetEntityByIndex(uint32_t entity_index)
 {
+    // LOGG_verbose("Requested Index = %d; Entity Capacity = %d; No. of Entities = %d", entity_index, entity_capacity, entity_count);
     return entities[entity_index];
 }
 

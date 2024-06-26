@@ -45,17 +45,17 @@ static void check_collisions(ENTITY_entity* entity)
             if ((overlap_x >= 0.0) && (overlap_y >= 0.0))
             {
                 // LOGG_info("Collision detected. Entity IDs: %d and %d; Overlaps: X = %f Y = %f", entity->id, other_entity->id, overlap_x, overlap_y);
-                if (overlap_x < overlap_y)
+                if (overlap_x < overlap_y) // if horizontal overlap is smallest
                 {
-                    if (entity->physics_info->velocity.x > 0.0)
+                    if (entity->physics_info->velocity.x > 0.0) // if entity was moving right
                     {
-                        entity->transform.position.x -= overlap_x;
+                        entity->transform.position.x -= overlap_x; // move entity left by the overlap amount
                     }
-                    else
+                    else // if entity was moving left
                     {
-                        entity->transform.position.x += overlap_x;
+                        entity->transform.position.x += overlap_x; // move entity right by the overlap amount
                     }
-                    entity->physics_info->velocity.x = 0.0;
+                    entity->physics_info->velocity.x = 0.0; // stop entity movement on the horizontal axis
                 }
                 else
                 {

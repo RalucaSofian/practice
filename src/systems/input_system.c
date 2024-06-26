@@ -415,6 +415,7 @@ static void init_key_info(void)
                 temp_str = NULL;
                 break;
         }
+
         if (NULL != temp_str)
         {
             key_info[i].key_state = KEY_STATE_RELEASED;

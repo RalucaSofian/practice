@@ -26,7 +26,7 @@ const vec2           INITIAL_PLAYER_POS = {.x = 1.0, .y = 2.0};
 * GLOBAL VARIABLES
 ************************************************************************/
 const double PLAYER_MOVEMENT_FORCE = 2000.0;
-const double PLAYER_JUMP_FORCE     = 30000.0;
+const double PLAYER_JUMP_FORCE     = 40000.0;
 
 /************************************************************************
 * FUNCTION DEFINITIONS

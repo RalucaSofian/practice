@@ -39,18 +39,18 @@ static char* logg_timestamp(void)
     char* timestamp = (char*)malloc(MAX_TIMESTAMP);
     char* no_millis = (char*)malloc(MAX_TIMESTAMP-10);
 
-    /* format time from raw time into formatted string */
+    // format time from raw time into formatted string
     time_t raw_time; 
     time(&raw_time);
     struct tm* info = localtime(&raw_time);
     strftime(no_millis, MAX_TIMESTAMP-10, "[%d-%m-%Y %H:%M:%S", info);
 
-    /* extract miliseconds from epoch time */
+    // extract miliseconds from epoch time
     struct timeval epoch;
     gettimeofday(&epoch, NULL);
     unsigned long msec = epoch.tv_usec/1000;
 
-    /* create final timestamp */
+    // create final timestamp
     sprintf(timestamp, "%s.%03lu]", no_millis, msec);
 
     free(no_millis);
