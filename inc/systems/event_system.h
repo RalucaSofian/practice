@@ -42,9 +42,8 @@ typedef struct _EVSYS_kb_event
  */
 typedef struct _EVSYS_mouse_btn_event
 {
-    INTYPES_key_state button_state;
-    //! TODO: create translation from GLFW keycodes
-    int       button;
+    INTYPES_key_state  button_state;
+    INTYPES_mouse_btns button;
 }EVSYS_mouse_btn_event;
 
 /*! @brief Structure of the mouse move events to be handled by the system

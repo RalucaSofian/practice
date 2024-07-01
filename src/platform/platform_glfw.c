@@ -64,47 +64,36 @@ static void keypress_cb(GLFWwindow* window, int key, int scancode, int action, i
 /*! @brief Handler used for reacting to mouse button presses */
 static void mouse_btn_cb(GLFWwindow* window, int button, int action, int mods)
 {
-    switch (button)
+    EVSYS_mouse_btn_event mouse_btn_event;
+
+    mouse_btn_event.button = PLATF_TranslateMouseBtnCode(button);
+
+    if (GLFW_PRESS == action)
     {
-        case GLFW_MOUSE_BUTTON_RIGHT:
-            if (GLFW_PRESS == action)
-            {
-                LOGG_info("RMB pressed");
-            }
-            else if (GLFW_RELEASE == action)
-            {
-                LOGG_info("RMB released");
-            }
-            break;
-        case GLFW_MOUSE_BUTTON_LEFT:
-            if (GLFW_PRESS == action)
-            {
-                LOGG_info("LMB pressed");
-            }
-            else if (GLFW_RELEASE == action)
-            {
-                LOGG_info("LMB released");
-            }
-            break;
-        case GLFW_MOUSE_BUTTON_MIDDLE:
-            if (GLFW_PRESS == action)
-            {
-                LOGG_info("MMB pressed");
-            }
-            else if (GLFW_RELEASE == action)
-            {
-                LOGG_info("MMB released");
-            }
-            break;
-        default:
-            break;
+        mouse_btn_event.button_state = KEY_STATE_PRESSED;
     }
+    else if (GLFW_RELEASE == action)
+    {
+        mouse_btn_event.button_state = KEY_STATE_RELEASED;
+    }
+    else
+    {
+        // Ignore button repeat events
+        return;
+    }
+
+    EVSYS_DispatchMouseBtnEvent(mouse_btn_event);
 }
 
 /*! @brief Handler used for reacting to mouse position changes */
 static void cursor_pos_cb(GLFWwindow* window, double xpos, double ypos)
 {
-    // LOGG_info("Mouse Coordinates: XPos = %f YPos = %f", xpos, ypos);
+    EVSYS_mouse_move_event mouse_move_event;
+
+    mouse_move_event.x_pos = xpos;
+    mouse_move_event.y_pos = ypos;
+
+    EVSYS_DispatchMouseMoveEvent(mouse_move_event);
 }
 
 

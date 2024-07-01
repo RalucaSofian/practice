@@ -75,5 +75,5 @@ void REND_DrawLineWithCol(double a_x, double a_y, double b_x, double b_y, REND_c
 
 void REND_Deinit(void)
 {
-    // may not need
+
 }

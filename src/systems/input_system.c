@@ -22,7 +22,7 @@
 * INTERNAL DATA TYPES
 ************************************************************************/
 
-/*! @brief Structure of the key info handled by the Input System
+/*! @brief Structure of the kb key info handled by the Input System
  */
 typedef struct _INSYS_key_info
 {
@@ -31,17 +31,30 @@ typedef struct _INSYS_key_info
     char*             key_name;
 }INSYS_key_info;
 
+/*! @brief Structure of the mouse buttons info handled by the Input System
+ */
+typedef struct _INSYS_mouse_btn_info
+{
+    INTYPES_key_state  btn_state;
+    INTYPES_mouse_btns btn_code;
+    char*              btn_name;
+}INSYS_mouse_btn_info;
+
 /************************************************************************
 * GLOBAL VARIABLES
 ************************************************************************/
-INSYS_key_info key_info[KEY_LAST + 1]; // Key Info array
-int kb_handl_id; // Handler ID of the KB event handler
+INSYS_key_info       kb_key_info[KEY_LAST + 1];          // KB Key Info array
+INSYS_mouse_btn_info mouse_btn_info[MOUSE_BTN_LAST + 1]; // Mouse Btn Info array
+
+int kb_handl_id;         // Handler ID of the KB event handler
+int mouse_btn_handl_id;  // Handler ID of the Mouse Btn event handler
+int mouse_move_handl_id; // Handler ID of the Mouse Move event handler
 
 /************************************************************************
 * FUNCTION DEFINITIONS
 ************************************************************************/
 
-/*! @brief Internal function used for initializing the Key Info structure
+/*! @brief Internal function used for initializing the KB Key Info structure
  */
 static void init_key_info(void)
 {
@@ -418,11 +431,47 @@ static void init_key_info(void)
 
         if (NULL != temp_str)
         {
-            key_info[i].key_state = KEY_STATE_RELEASED;
-            key_info[i].key_code  = i;
+            kb_key_info[i].key_state = KEY_STATE_RELEASED;
+            kb_key_info[i].key_code  = i;
 
-            key_info[i].key_name = (char*)malloc(strlen(temp_str)+1);
-            strcpy(key_info[i].key_name, temp_str);
+            kb_key_info[i].key_name = (char*)malloc(strlen(temp_str)+1);
+            strcpy(kb_key_info[i].key_name, temp_str);
+        }
+    }
+
+}
+
+/*! @brief Internal function used for initializing the Mouse Buttons Info structure
+ */
+static void init_mouse_btn_info(void)
+{
+    char* temp_str = NULL;
+
+    for (int i = 0; i <= MOUSE_BTN_LAST; i++)
+    {
+        switch (i)
+        {
+            case MOUSE_BTN_LEFT:
+                temp_str = "LMB";
+                break;
+            case MOUSE_BTN_RIGHT:
+                temp_str = "RMB";
+                break;
+            case MOUSE_BTN_MIDDLE:
+                temp_str = "MMB";
+                break;
+            default:
+                temp_str = NULL;
+                break;
+        }
+
+        if (NULL != temp_str)
+        {
+            mouse_btn_info[i].btn_state = KEY_STATE_RELEASED;
+            mouse_btn_info[i].btn_code  = i;
+
+            mouse_btn_info[i].btn_name = (char*)malloc(strlen(temp_str)+1);
+            strcpy(mouse_btn_info[i].btn_name, temp_str);
         }
     }
 
@@ -435,12 +484,29 @@ static void clear_key_info(void)
 {
     for (int i = 0; i <= KEY_LAST; i++)
     {
-        key_info[i].key_state = KEY_STATE_NONE;
-        key_info[i].key_code  = KEY_LAST;
+        kb_key_info[i].key_state = KEY_STATE_NONE;
+        kb_key_info[i].key_code  = KEY_LAST;
 
-        if (NULL != key_info[i].key_name)
+        if (NULL != kb_key_info[i].key_name)
         {
-            free(key_info[i].key_name);
+            free(kb_key_info[i].key_name);
+        }
+    }
+}
+
+/*! @brief Internal function used for clearing the Mouse Buttons Info
+ *        structure before de-initialization of the Input System
+ */
+static void clear_mouse_btn_info(void)
+{
+    for (int i = 0; i <= MOUSE_BTN_LAST; i++)
+    {
+        mouse_btn_info[i].btn_state = KEY_STATE_NONE;
+        mouse_btn_info[i].btn_code  = MOUSE_BTN_LAST;
+
+        if (NULL != mouse_btn_info[i].btn_name)
+        {
+            free(mouse_btn_info[i].btn_name);
         }
     }
 }
@@ -451,13 +517,33 @@ static void clear_key_info(void)
  */
 static void kb_change_cbk(EVSYS_kb_event* kb_event)
 {
-    key_info[kb_event->key].key_state = kb_event->key_state;
-    key_info[kb_event->key].key_code  = kb_event->key;
+    kb_key_info[kb_event->key].key_state = kb_event->key_state;
+    kb_key_info[kb_event->key].key_code  = kb_event->key;
 
     LOGG_info("Updated KB Key. Key State = %d; Key Code = %d; Key Name = %s",
-                key_info[kb_event->key].key_state,
-                key_info[kb_event->key].key_code,
-                key_info[kb_event->key].key_name);
+                kb_key_info[kb_event->key].key_state,
+                kb_key_info[kb_event->key].key_code,
+                kb_key_info[kb_event->key].key_name);
+}
+
+/*! @brief Handler used for reacting to mouse button changes.
+ *  The Mouse Button Info structure is updated each time
+ *  a mouse button event is emitted
+ */
+static void mouse_btn_change_cbk(EVSYS_mouse_btn_event* mouse_btn_event)
+{
+    mouse_btn_info[mouse_btn_event->button].btn_state = mouse_btn_event->button_state;
+    mouse_btn_info[mouse_btn_event->button].btn_code  = mouse_btn_event->button;
+
+    LOGG_info("Updated Mouse Button. MBtn State = %d; MBtn Code = %d; MBtn Name = %s",
+                mouse_btn_info[mouse_btn_event->button].btn_state,
+                mouse_btn_info[mouse_btn_event->button].btn_code,
+                mouse_btn_info[mouse_btn_event->button].btn_name);
+}
+
+static void mouse_move_cbk(EVSYS_mouse_move_event* mouse_move_event)
+{
+    // LOGG_info("Mouse Move Event. X Pos = %f; Y Pos = %f", mouse_move_event->x_pos, mouse_move_event->y_pos);
 }
 
 
@@ -467,23 +553,29 @@ static void kb_change_cbk(EVSYS_kb_event* kb_event)
 void INSYS_Init(void)
 {
     init_key_info();
+    init_mouse_btn_info();
 
-    kb_handl_id = EVSYS_SubscribeKbEvent(kb_change_cbk);
+    kb_handl_id         = EVSYS_SubscribeKbEvent(kb_change_cbk);
+    mouse_btn_handl_id  = EVSYS_SubscribeMouseBtnEvent(mouse_btn_change_cbk);
+    mouse_move_handl_id = EVSYS_SubscribeMouseMoveEvent(mouse_move_cbk);
 }
 
 void INSYS_GetKeyName(int key_code, const char** key_name)
 {
-    *key_name = key_info[key_code].key_name;
+    *key_name = kb_key_info[key_code].key_name;
 }
 
 int INSYS_GetKeyState(INTYPES_key_code key_code)
 {
-    return key_info[key_code].key_state;
+    return kb_key_info[key_code].key_state;
 }
 
 void INSYS_Deinit(void)
 {
     clear_key_info();
+    clear_mouse_btn_info();
 
     EVSYS_UnsubscribeEvent(kb_handl_id);
+    EVSYS_UnsubscribeEvent(mouse_btn_handl_id);
+    EVSYS_UnsubscribeEvent(mouse_move_handl_id);
 }

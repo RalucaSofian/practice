@@ -264,5 +264,30 @@ INTYPES_key_code PLATF_TranslateKeycode(int platform_keycode)
         default:
             return KEY_LAST;
     }
+
+    return 0;
+}
+
+INTYPES_mouse_btns PLATF_TranslateMouseBtnCode(int platform_btn_code)
+{
+    switch (platform_btn_code)
+    {
+        case GLFW_MOUSE_BUTTON_LEFT:
+            return MOUSE_BTN_LEFT;
+            break;
+
+        case GLFW_MOUSE_BUTTON_RIGHT:
+            return MOUSE_BTN_RIGHT;
+            break;
+
+        case GLFW_MOUSE_BUTTON_MIDDLE:
+            return MOUSE_BTN_MIDDLE;
+            break;
+
+        default:
+            return MOUSE_BTN_LAST;
+            break;
+    }
+
     return 0;
 }

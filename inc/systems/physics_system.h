@@ -33,7 +33,7 @@ void PHYS_ResetForce(ENTITY_entity* entity);
  */
 void PHYS_ApplyForce(ENTITY_entity* entity, vec2 force);
 
-/*! @brief Apply all the default forces on an entity
+/*! @brief Apply all the default forces on an entity (Gravity, Air Friction)
  *  @param[in] entity - entity that needs to be updated
  */
 void PHYS_ApplyDefaultForces(ENTITY_entity* entity);

@@ -23,6 +23,10 @@
  */
 INTYPES_key_code PLATF_TranslateKeycode(int platform_keycode);
 
-//! TODO: create func to translate mouse btn codes into internal ones
+/*! @brief Translate GLFW mouse button codes into internal button codes
+ *  @param[in] platform_btn_code - button code that needs to be translated
+ *  @return translated button code
+ */
+INTYPES_mouse_btns PLATF_TranslateMouseBtnCode(int platform_btn_code);
 
 #endif // PLATFORM_GLFW_EVENTS_H

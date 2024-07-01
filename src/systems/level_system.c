@@ -40,7 +40,7 @@ void LVLSYS_LoadLevel(void)
     {
         if (NULL != fgets(file_line, 100, lvl_file))
         {
-            // remove the New Line char at the end of each line
+            // Remove the New Line char at the end of each line
             size_t line_len = strlen(file_line);
             if (file_line[line_len-1] == '\n')
             {

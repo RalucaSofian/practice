@@ -71,6 +71,8 @@ static void kb_quit_handler(EVSYS_kb_event* kb_event)
     }
 }
 
+/*! @brief Handler used for reacting to the R key being pressed
+ */
 static void player_reset_handler(EVSYS_kb_event* kb_event)
 {
     // Player Position Reset == R key was pressed
@@ -91,6 +93,7 @@ static void player_reset_handler(EVSYS_kb_event* kb_event)
         }
     }
 }
+
 
 /************************************************************************
 ************************************************************************/
@@ -152,23 +155,23 @@ void GAMECTRL_Render(void)
         {
             RENDSYS_DrawEntity(entity);
             //! DEBUG: Draw forces applied on to the player entity
-            // if entity we've just drawn was a player
+            // If entity we've just drawn was a player
             if (NULL != entity->player_info)
             {
-                // find entity center
+                // Find entity center
                 vec2 player_center;
                 player_center.x = entity->transform.position.x + (entity->transform.width/2.0);
                 player_center.y = entity->transform.position.y + (entity->transform.height/2.0);
-                // draw force as a line
-                // scale force down and translate it for drawing
+                // Draw force as a red line
+                // Scale force down and translate it for drawing
                 vec2 scaled_force = VEC2_scale(entity->physics_info->force, 1.0/2000.0);
                 scaled_force = VEC2_add(player_center, scaled_force);
                 RENDSYS_DrawLine(player_center,
                                  scaled_force,
                                  col_red);
 
-                // draw velocity as a line
-                // scale velocity down and translate it for drawing
+                // Draw velocity as a green line
+                // Scale velocity down and translate it for drawing
                 vec2 scaled_velocity = VEC2_scale(entity->physics_info->velocity, 1.0/10.0);
                 scaled_velocity = VEC2_add(player_center, scaled_velocity);
                 RENDSYS_DrawLine(player_center,
@@ -185,7 +188,9 @@ void GAMECTRL_Render(void)
 void GAMECTRL_Deinit(void)
 {
     PLAYER_Deinit();
+
     ENTITY_DeinitEntities();
+
     EVSYS_UnsubscribeEvent(player_reset_handler_id);
     EVSYS_UnsubscribeEvent(kb_quit_handler_id);
 }
