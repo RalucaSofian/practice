@@ -33,7 +33,7 @@ all: $(BINARY)
 $(BINARY): $(SOURCES)
 	$(CC) $(DEFS) $(SOURCES) $(CUSTOM_CFLAGS) $(CUSTOM_LDFLAGS) $(INCLUDES) -o $(BINARY)
 
-haste:
+run:
 	@$(BINARY) "Testing" 1280 720
 
 clean:

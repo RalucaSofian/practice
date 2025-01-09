@@ -61,19 +61,6 @@ ENTITY_entity* ENTITY_CreatePlayerEntity(double x, double y,
                                          REND_colour colour,
                                          int player_number, PLAYER_key_map key_map);
 
-// /*! @brief Create a dynamic (moving) entity
-//  *  @param[in] x - coordinate of the entity on the X axis
-//  *  @param[in] y - coordinate of the entity on the Y axis
-//  *  @param[in] width - width of the entity
-//  *  @param[in] height - height of the entity
-//  *  @param[in] mass - mass of the entity
-//  *  @param[in] colour - colour of the entity
-//  *  @return const pointer to the newly created entity
-//  */
-// const entity* create_dynamic_entity(double x, double y,
-//                                     double width, double height,
-//                                     double mass, renderer_colour colour);
-
 /*! @brief Get an entity by its index
  *  @param[in] entity_index - index of entity
  *  @return pointer to the entity

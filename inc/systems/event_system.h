@@ -97,18 +97,6 @@ int EVSYS_SubscribeMouseBtnEvent(EVSYS_mouse_btn_ev_handler event_handler);
  */
 int EVSYS_SubscribeMouseMoveEvent(EVSYS_mouse_move_ev_handler event_handler);
 
-// /*! @brief Subscribe to a window resize event
-//  *  @param[out] event_handler - handler function for window resize events
-//  *  @return ID of the subscribed event handler
-// */
-// int es_subscribe_window_resize_event(void* event_handler);
-
-// /*! @brief Subscribe to a Pause event
-//  *  @param[out] event_handler - handler function for Pause events
-//  *  @return ID of the subscribed event handler
-// */
-// int es_subscribe_pause_event(void* event_handler);
-
 /*! @brief Subscribe to a Quit event
  *  @param[out] event_handler - handler function for Quit events
  *  @return ID of the subscribed event handler

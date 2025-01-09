@@ -111,13 +111,6 @@ ENTITY_entity* ENTITY_CreatePlayerEntity(double x, double y,
     return player_entity;
 }
 
-// const entity* create_dynamic_entity(double x, double y,
-//                                     double width, double height,
-//                                     double mass, renderer_colour colour)
-// {
-
-// }
-
 ENTITY_entity* ENTITY_GetEntityByIndex(uint32_t entity_index)
 {
     // LOGG_verbose("Requested Index = %d; Entity Capacity = %d; No. of Entities = %d", entity_index, entity_capacity, entity_count);

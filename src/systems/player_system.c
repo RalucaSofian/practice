@@ -44,11 +44,6 @@ void PLAYER_Update(double time_delta, ENTITY_entity* entity)
         return;
     }
 
-    // TEST
-    // double velocity = VEC2_len(entity->physics_info->velocity);
-    // LOGG_verbose("Player Vel: %f m/s; is_on_ground: %d", velocity, entity->physics_info->is_on_ground);
-    // TEST
-
     INTYPES_key_state up_state = INSYS_GetKeyState(entity->player_info->key_map.key_up);
     if ((KEY_STATE_PRESSED == up_state) && (true == entity->physics_info->is_on_ground))
     {
